@@ -1,12 +1,15 @@
 package com.tothenew.sharda.Controller;
 
 import com.tothenew.sharda.Dto.LoginDao;
+import com.tothenew.sharda.Dto.Request.TokenRefreshRequest;
 import com.tothenew.sharda.Dto.Response.JwtResponse;
 import com.tothenew.sharda.Dto.Response.MessageResponse;
+import com.tothenew.sharda.Dto.Response.TokenRefreshResponse;
 import com.tothenew.sharda.Dto.Response.UserInfoResponse;
 import com.tothenew.sharda.Dto.SignupCustomerDao;
 import com.tothenew.sharda.Dto.SignupSellerDao;
 import com.tothenew.sharda.Exception.Email.EmailSender;
+import com.tothenew.sharda.Exception.TokenRefreshException;
 import com.tothenew.sharda.Model.*;
 import com.tothenew.sharda.RegistrationConfig.RegistrationService;
 import com.tothenew.sharda.Repository.*;
@@ -191,6 +194,20 @@ public class AuthController {
 //        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
 //                .body(new MessageResponse("You've been signed out!"));
 //    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromUsername(user.getEmail());
+                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                        "Refresh token is not in database!"));
+    }
 
     @PutMapping(path = "/confirm")
     public String confirm(@RequestParam("token") String token) {
