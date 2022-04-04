@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {TokenNotFoundException.class})
-    public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException e) {
+    @ExceptionHandler(value = {InvalidTokenException.class})
+    public ResponseEntity<Object> handleTokenNotFoundException(InvalidTokenException e) {
         return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
     }
 

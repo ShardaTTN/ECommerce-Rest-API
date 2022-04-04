@@ -18,4 +18,6 @@ public class Role {
 
     @Column(length = 60)
     private String authority;
+
+
 }

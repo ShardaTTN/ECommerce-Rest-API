@@ -1,4 +1,4 @@
-package com.tothenew.sharda.Email;
+package com.tothenew.sharda.Exception.Email;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,21 +1,17 @@
 package com.tothenew.sharda.Controller;
 
 import com.tothenew.sharda.Dto.LoginDao;
+import com.tothenew.sharda.Dto.Response.JwtResponse;
 import com.tothenew.sharda.Dto.Response.MessageResponse;
 import com.tothenew.sharda.Dto.Response.UserInfoResponse;
 import com.tothenew.sharda.Dto.SignupCustomerDao;
 import com.tothenew.sharda.Dto.SignupSellerDao;
-import com.tothenew.sharda.Email.EmailSender;
-import com.tothenew.sharda.Model.Customer;
-import com.tothenew.sharda.Model.Role;
-import com.tothenew.sharda.Model.Seller;
-import com.tothenew.sharda.Model.User;
+import com.tothenew.sharda.Exception.Email.EmailSender;
+import com.tothenew.sharda.Model.*;
 import com.tothenew.sharda.RegistrationConfig.RegistrationService;
-import com.tothenew.sharda.Repository.CustomerRepository;
-import com.tothenew.sharda.Repository.RoleRepository;
-import com.tothenew.sharda.Repository.SellerRepository;
-import com.tothenew.sharda.Repository.UserRepository;
+import com.tothenew.sharda.Repository.*;
 import com.tothenew.sharda.Security.JwtUtils;
+import com.tothenew.sharda.Service.RefreshTokenService;
 import com.tothenew.sharda.Service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -57,6 +53,9 @@ public class AuthController {
     RegistrationService registrationService;
     @Autowired
     EmailSender emailSender;
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
 
     @PostMapping("/customer")
     public ResponseEntity<?> registerAsCustomer(@Valid @RequestBody SignupCustomerDao signupCustomerDao) {
@@ -80,7 +79,7 @@ public class AuthController {
 
         String token = registrationService.generateToken(user);
 
-        String link = "http://localhost:4545/api/signup/customer/confirm?token="+token;
+        String link = "http://localhost:8080/api/signup/customer/confirm?token="+token;
         emailSender.send(signupCustomerDao.getEmail(), registrationService.buildEmail(signupCustomerDao.getFirstName(), link));
         return new ResponseEntity<>(
                 "Customer Registered Successfully!\nHere is your activation token use it with in 15 minutes\n"+token,
@@ -110,7 +109,7 @@ public class AuthController {
 
         String token = registrationService.generateToken(user);
 
-        String link = "http://localhost:4545/api/signup/seller/confirm?token="+token;
+        String link = "http://localhost:8080/api/signup/seller/confirm?token="+token;
         emailSender.send(signupSellerDao.getEmail(), registrationService.buildEmail(signupSellerDao.getFirstName(), link));
 
         return new ResponseEntity<>(
@@ -118,28 +117,90 @@ public class AuthController {
                 HttpStatus.CREATED);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDao loginRequest) {
+    @PostMapping("/admin/login")
+    public ResponseEntity<?> loginAsAdmin(@Valid @RequestBody LoginDao loginDao){
+        User user = new User();
+        user.setEmail(loginDao.getEmail());
+        user.setPassword(passwordEncoder.encode(loginDao.getPassword()));
+
+        Role roles = roleRepository.findByAuthority("ROLE_ADMIN").get();
+        user.setRoles(Collections.singleton(roles));
+
+        userRepository.save(user);
+
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(),
-                        userDetails.getEmail(),
-                        roles));
+        String jwt = jwtUtils.generateJwtToken(userDetails);
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken()));
+//        return new ResponseEntity<>("Admin logged in Successfully!!",new JwtResponse(jwt, refreshToken.getToken()
+//                "Admin logged in Successfully!!",
+//                HttpStatus.CREATED)));
+
     }
 
-    @PostMapping("/signout")
-    public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+    @PostMapping("/customer/login")
+    public ResponseEntity<?> loginAsCustomer(@Valid @RequestBody LoginDao loginDao){
+
+        User user = new User();
+        user.setEmail(loginDao.getEmail());
+        user.setPassword(passwordEncoder.encode(loginDao.getPassword()));
+
+        Role roles = roleRepository.findByAuthority("ROLE_CUSTOMER").get();
+        user.setRoles(Collections.singleton(roles));
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>(
+                "Customer logged in Successfully!!",
+                HttpStatus.CREATED);
+
     }
+
+    @PostMapping("/seller/login")
+    public ResponseEntity<?> loginAsSeller(@Valid @RequestBody LoginDao loginDao){
+
+        User user = new User();
+        user.setEmail(loginDao.getEmail());
+        user.setPassword(passwordEncoder.encode(loginDao.getPassword()));
+
+        Role roles = roleRepository.findByAuthority("ROLE_SELLER").get();
+        user.setRoles(Collections.singleton(roles));
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>(
+                "Seller logged in Successfully!!",
+                HttpStatus.CREATED);
+
+    }
+
+//    @PostMapping("/signin")
+//    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDao loginRequest) {
+//        Authentication authentication = authenticationManager
+//                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+//        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+//        List<String> roles = userDetails.getAuthorities().stream()
+//                .map(item -> item.getAuthority())
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+//                .body(
+//                      new UserInfoResponse(userDetails.getId(),
+//                        userDetails.getEmail(),
+//                        roles));
+//    }
+
+//    @PostMapping("/signout")
+//    public ResponseEntity<?> logoutUser() {
+//        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+//                .body(new MessageResponse("You've been signed out!"));
+//    }
 
     @PutMapping(path = "/confirm")
     public String confirm(@RequestParam("token") String token) {
@@ -150,4 +211,6 @@ public class AuthController {
     public String confirmByEmail(@RequestParam("email") String email) {
         return registrationService.confirmByEmail(email);
     }
+
+
 }

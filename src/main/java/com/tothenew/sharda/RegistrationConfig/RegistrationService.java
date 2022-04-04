@@ -2,7 +2,7 @@ package com.tothenew.sharda.RegistrationConfig;
 
 import com.tothenew.sharda.Exception.EmailAlreadyConfirmedException;
 import com.tothenew.sharda.Exception.TokenExpiredException;
-import com.tothenew.sharda.Exception.TokenNotFoundException;
+import com.tothenew.sharda.Exception.InvalidTokenException;
 import com.tothenew.sharda.Model.User;
 import com.tothenew.sharda.RegistrationConfig.Token.ConfirmationToken;
 import com.tothenew.sharda.RegistrationConfig.Token.ConfirmationTokenRepository;
@@ -44,17 +44,18 @@ public class RegistrationService {
 
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
-                .orElseThrow(() -> new TokenNotFoundException("Token not found!"));
-        if (confirmationToken.getConfirmedAt() != null) {
-            throw new EmailAlreadyConfirmedException("Email already confirmed.");
-        }
-        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException("Token expired!!");
-        }
-        confirmationTokenService.setConfirmedAt(token);
-        userService.enableUser(confirmationToken.getUser().getEmail());
-        return "confirmed";
+                    .orElseThrow(() -> new InvalidTokenException("Token Not Found!"));
+            if (confirmationToken.getConfirmedAt() != null) {
+                throw new EmailAlreadyConfirmedException("Email already confirmed.");
+            }
+            LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+            if (expiredAt.isBefore(LocalDateTime.now())) {
+                throw new TokenExpiredException("Token expired!!");
+            }
+            confirmationTokenService.setConfirmedAt(token);
+            userService.enableUser(confirmationToken.getUser().getEmail());
+            return "confirmed";
+
     }
 
     public String confirmByEmail(String email) {

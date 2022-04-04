@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,9 +21,11 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     public static final int MAX_FAILED_ATTEMPTS = 3;
+    private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
 
     @Autowired
     UserRepository userRepository;
+
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -62,4 +67,67 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public String forgotPassword(String email) {
+
+        Optional<User> userOptional = Optional
+                .ofNullable(userRepository.findUserByEmail(email));
+
+        if (!userOptional.isPresent()) {
+            return "Invalid email id.";
+        }
+
+        User user = userOptional.get();
+        user.setPasswordResetToken(generateToken());
+        user.setTokenCreationDate(LocalDateTime.now());
+
+        user = userRepository.save(user);
+
+        return user.getPasswordResetToken();
+    }
+
+    public String resetPassword(String token, String password) {
+
+        Optional<User> userOptional = Optional
+                .ofNullable(userRepository.findByPasswordResetToken(token));
+
+        if (!userOptional.isPresent()) {
+            return "Invalid token.";
+        }
+
+        LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
+
+        if (isTokenExpired(tokenCreationDate)) {
+            return "Token expired.";
+
+        }
+
+        User user = userOptional.get();
+
+        user.setPassword(password);
+        user.setPasswordResetToken(null);
+        user.setTokenCreationDate(null);
+
+        userRepository.save(user);
+
+        return "Your password successfully updated.";
+    }
+
+    private String generateToken() {
+        StringBuilder token = new StringBuilder();
+
+        return token.append(UUID.randomUUID().toString())
+                .append(UUID.randomUUID().toString()).toString();
+    }
+
+    private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration diff = Duration.between(tokenCreationDate, now);
+
+        return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
+    }
+
+
+
 }

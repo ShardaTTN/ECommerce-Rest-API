@@ -11,6 +11,7 @@ public class UserInfoResponse {
     private String email;
     private List<String> roles;
 
+
     public Long getId() {
         return id;
     }

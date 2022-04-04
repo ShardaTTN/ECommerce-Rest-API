@@ -29,6 +29,11 @@ public class User {
     private Boolean isLocked;
     private Integer invalidAttemptCount;
     private LocalDateTime passwordUpdateDate;
+    private String passwordResetToken;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime tokenCreationDate;
+
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
@@ -41,4 +46,13 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Customer> customers;
+//
+//    public void activate() {
+//        this.active = true;
+//    }
+//
+//    public void deactivate() {
+//        this.active = false;
+//    }
+
 }
