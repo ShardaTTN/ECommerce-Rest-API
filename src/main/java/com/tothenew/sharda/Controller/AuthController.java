@@ -119,14 +119,6 @@ public class AuthController {
 
     @PostMapping("/admin/login")
     public ResponseEntity<?> loginAsAdmin(@Valid @RequestBody LoginDao loginDao){
-        User user = new User();
-        user.setEmail(loginDao.getEmail());
-        user.setPassword(passwordEncoder.encode(loginDao.getPassword()));
-
-        Role roles = roleRepository.findByAuthority("ROLE_ADMIN").get();
-        user.setRoles(Collections.singleton(roles));
-
-        userRepository.save(user);
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
@@ -135,46 +127,44 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(userDetails);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken()));
-//        return new ResponseEntity<>("Admin logged in Successfully!!",new JwtResponse(jwt, refreshToken.getToken()
-//                "Admin logged in Successfully!!",
-//                HttpStatus.CREATED)));
+        String welcomeMessage = "Welcome back, Admin";
+
+        JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
+        return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);
 
     }
 
     @PostMapping("/customer/login")
     public ResponseEntity<?> loginAsCustomer(@Valid @RequestBody LoginDao loginDao){
 
-        User user = new User();
-        user.setEmail(loginDao.getEmail());
-        user.setPassword(passwordEncoder.encode(loginDao.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String jwt = jwtUtils.generateJwtToken(userDetails);
 
-        Role roles = roleRepository.findByAuthority("ROLE_CUSTOMER").get();
-        user.setRoles(Collections.singleton(roles));
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+        String welcomeMessage = "Customer logged in Successfully!!";
 
-        userRepository.save(user);
-
-        return new ResponseEntity<>(
-                "Customer logged in Successfully!!",
-                HttpStatus.CREATED);
+        JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
+        return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);
 
     }
 
     @PostMapping("/seller/login")
     public ResponseEntity<?> loginAsSeller(@Valid @RequestBody LoginDao loginDao){
 
-        User user = new User();
-        user.setEmail(loginDao.getEmail());
-        user.setPassword(passwordEncoder.encode(loginDao.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String jwt = jwtUtils.generateJwtToken(userDetails);
 
-        Role roles = roleRepository.findByAuthority("ROLE_SELLER").get();
-        user.setRoles(Collections.singleton(roles));
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+        String welcomeMessage = "Seller logged in Successfully!!";
 
-        userRepository.save(user);
-
-        return new ResponseEntity<>(
-                "Seller logged in Successfully!!",
-                HttpStatus.CREATED);
+        JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
+        return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);
 
     }
 
