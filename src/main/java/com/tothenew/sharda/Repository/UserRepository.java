@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
     User findByPasswordResetToken(String token);
     User findUserByEmail(String email);
+
+    @Query(value = "SELECT a.is_active from Users a WHERE a.id = ?1", nativeQuery = true)
+    Boolean isUserActive(Long id);
 
     @Transactional
     @Modifying
@@ -38,5 +42,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void updateInvalidAttemptCount(Integer invalidAttemptCount, String email);
 
 
+    @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active FROM Users a WHERE a.id = (SELECT user_id from USER_ROLES where role_id = 2)", nativeQuery = true)
+    List<Object[]> printPartialDataForCustomers();
 
+    @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active FROM Users a WHERE a.id = (SELECT user_id from USER_ROLES where role_id = 3)", nativeQuery = true)
+    List<Object[]> printPartialDataForSellers();
 }

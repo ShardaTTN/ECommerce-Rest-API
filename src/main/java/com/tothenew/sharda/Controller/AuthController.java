@@ -72,6 +72,11 @@ public class AuthController {
         user.setEmail(signupCustomerDao.getEmail());
         user.setPassword(passwordEncoder.encode(signupCustomerDao.getPassword()));
         user.setLastName(signupCustomerDao.getLastName());
+        user.setIsActive(false);
+        user.setIsDeleted(false);
+        user.setIsExpired(false);
+        user.setIsLocked(false);
+        user.setInvalidAttemptCount(0);
 
         Customer customer = new Customer(user, signupCustomerDao.getContact());
 

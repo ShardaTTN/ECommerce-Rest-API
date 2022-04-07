@@ -9,7 +9,11 @@ import com.tothenew.sharda.RegistrationConfig.Token.ConfirmationTokenRepository;
 import com.tothenew.sharda.RegistrationConfig.Token.ConfirmationTokenService;
 import com.tothenew.sharda.Repository.UserRepository;
 import com.tothenew.sharda.Service.UserDetailsServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +23,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
+@Slf4j
 public class RegistrationService {
 
     @Autowired
@@ -29,6 +34,8 @@ public class RegistrationService {
     ConfirmationTokenService confirmationTokenService;
     @Autowired
     ConfirmationTokenRepository confirmationTokenRepository;
+    @Autowired
+    JavaMailSender javaMailSender;
 
     public String generateToken(User user) {
         String token = UUID.randomUUID().toString();
@@ -75,6 +82,30 @@ public class RegistrationService {
             return "Confirmed";
         }
         return "Not Confirmed";
+    }
+
+    public ResponseEntity<?> confirmById(Long id) {
+        if (userRepository.existsById(id)) {
+            log.info("User exists.");
+            if (userRepository.isUserActive(id)) {
+                return ResponseEntity.ok("Already confirmed User.");
+            } else {
+                User user = userRepository.getById(id);
+                user.setIsActive(true);
+                userRepository.save(user);
+                //Mail Part
+//                SimpleMailMessage mailMessage = new SimpleMailMessage();
+//                mailMessage.setTo(user.getEmail());
+//                mailMessage.setSubject("Account Activation");
+//                mailMessage.setText("This mail is to inform you that your account has been activated by Admin. Keep your smile up. :)");
+//                javaMailSender.send(mailMessage);
+                log.info("User activated!!");
+            }
+        } else {
+            log.info("No User exists!!");
+            return ResponseEntity.badRequest().body(String.format("No user exists with this user id: %s", id));
+        }
+        return ResponseEntity.ok().body(String.format("User activated with this user id: %s", id));
     }
 
     public String buildEmail(String name, String link) {
