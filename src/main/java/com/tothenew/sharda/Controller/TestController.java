@@ -1,5 +1,6 @@
 package com.tothenew.sharda.Controller;
 
+import com.tothenew.sharda.Model.Customer;
 import com.tothenew.sharda.Model.User;
 import com.tothenew.sharda.RegistrationConfig.RegistrationService;
 import com.tothenew.sharda.Service.UserDetailsServiceImpl;
@@ -24,10 +25,10 @@ public class TestController {
         return "Public Content";
     }
 
-    @GetMapping("/customer")
+    @GetMapping("/customers")
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     public String userAccess() {
-        return "Customer Content.";
+        return "User Content" ;
     }
 
     @GetMapping("/seller")

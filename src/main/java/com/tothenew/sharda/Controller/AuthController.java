@@ -28,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +86,7 @@ public class AuthController {
         String link = "http://localhost:8080/api/signup/customer/confirm?token="+token;
         emailSender.send(signupCustomerDao.getEmail(), registrationService.buildEmail(signupCustomerDao.getFirstName(), link));
         return new ResponseEntity<>(
-                "Customer Registered Successfully!\nHere is your activation token use it with in 15 minutes\n"+token,
+                "Customer Registered Successfully!\nHere is your activation token use it with in 3 minutes\n"+token,
                 HttpStatus.CREATED
         );
     }
@@ -146,6 +147,7 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateJwtToken(userDetails);
 
+
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
         String welcomeMessage = "Customer logged in Successfully!!";
 
@@ -194,6 +196,8 @@ public class AuthController {
 //        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
 //                .body(new MessageResponse("You've been signed out!"));
 //    }
+
+
 
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {

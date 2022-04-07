@@ -1,9 +1,13 @@
 package com.tothenew.sharda.Service;
 
+import com.tothenew.sharda.Model.Customer;
 import com.tothenew.sharda.Model.Role;
 import com.tothenew.sharda.Model.User;
 import com.tothenew.sharda.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -62,10 +67,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void lock(Optional<User> user) {
         user.get().setIsLocked(true);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
     }
 
     public String forgotPassword(String email) {
@@ -128,6 +129,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
     }
 
-
+    public List<User> getAllUsers() {
+        return getAllUsers();
+    }
 
 }

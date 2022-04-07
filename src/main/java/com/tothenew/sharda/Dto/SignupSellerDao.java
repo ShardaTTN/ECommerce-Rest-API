@@ -18,6 +18,7 @@ public class SignupSellerDao {
     private final String email;
 
     @NotBlank(message = "Password cannot be empty")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,15}$")
     @Size(min = 8, max = 16, message = "Password must be equal or greater than 8 characters but less than 16 characters")
     private final String password;
 
