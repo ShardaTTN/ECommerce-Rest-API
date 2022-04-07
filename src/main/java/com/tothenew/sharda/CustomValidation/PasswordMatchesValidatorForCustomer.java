@@ -5,10 +5,10 @@ import com.tothenew.sharda.Dto.SignupCustomerDao;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordMatchesValidatorForCustomer implements ConstraintValidator<PasswordMatches, Object> {
+public class PasswordMatchesValidatorForCustomer implements ConstraintValidator<PasswordMatchesForCustomer, Object> {
 
     @Override
-    public void initialize(final PasswordMatches constraintAnnotation) {
+    public void initialize(final PasswordMatchesForCustomer constraintAnnotation) {
         //
     }
 

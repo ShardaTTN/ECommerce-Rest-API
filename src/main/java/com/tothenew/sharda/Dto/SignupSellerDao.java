@@ -1,13 +1,14 @@
 package com.tothenew.sharda.Dto;
 
-import com.tothenew.sharda.CustomValidation.PasswordMatches;
+import com.tothenew.sharda.CustomValidation.PasswordMatchesForCustomer;
+import com.tothenew.sharda.CustomValidation.PasswordMatchesForSeller;
 import com.tothenew.sharda.CustomValidation.ValidPassword;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 
 @Data
-@PasswordMatches
+@PasswordMatchesForSeller
 public class SignupSellerDao {
     private final String firstName;
     private final String lastName;

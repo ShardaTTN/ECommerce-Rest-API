@@ -4,10 +4,10 @@ import com.tothenew.sharda.Dto.SignupSellerDao;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordMatchesValidatorForSeller implements ConstraintValidator<PasswordMatches, Object> {
+public class PasswordMatchesValidatorForSeller implements ConstraintValidator<PasswordMatchesForSeller, Object> {
 
     @Override
-    public void initialize(final PasswordMatches constraintAnnotation) {
+    public void initialize(final PasswordMatchesForSeller constraintAnnotation) {
         //
     }
 
