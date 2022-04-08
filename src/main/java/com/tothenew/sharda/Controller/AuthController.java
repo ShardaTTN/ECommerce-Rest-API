@@ -26,9 +26,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -59,6 +61,11 @@ public class AuthController {
     EmailSender emailSender;
     @Autowired
     RefreshTokenService refreshTokenService;
+
+    @GetMapping("/home")
+    public ResponseEntity<?> welcomeHome() {
+        return ResponseEntity.ok("You have been logged out.");
+    }
 
 
     @PostMapping("/customer")
@@ -195,11 +202,14 @@ public class AuthController {
 //                        roles));
 //    }
 
-//    @PostMapping("/signout")
-//    public ResponseEntity<?> logoutUser() {
-//        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-//                .body(new MessageResponse("You've been signed out!"));
+//    @PostMapping("/logout")
+//    public String fetchSignoutSite(HttpServletRequest request, HttpServletResponse response) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null) {
+//            new SecurityContextLogoutHandler().logout(request, response, auth);
+//        }
+//
+//        return "redirect:/login?logout";
 //    }
 
 

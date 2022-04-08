@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -65,7 +66,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                        .antMatchers(HttpMethod.GET, "/api/admin/**").hasRole("ADMIN");
+                        .antMatchers(HttpMethod.GET, "/api/admin/**").hasRole("ADMIN")
+                        .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+                        .logoutSuccessUrl("/api/auth/home")
+                                .invalidateHttpSession(true)
+                                        .deleteCookies("JSESSIONID");
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
