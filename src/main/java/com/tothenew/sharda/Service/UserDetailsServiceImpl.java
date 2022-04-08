@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     public static final int MAX_FAILED_ATTEMPTS = 3;
@@ -37,7 +38,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).
                 orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with %s email", email)));
@@ -67,6 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void lock(Optional<User> user) {
         user.get().setIsLocked(true);
+        userRepository.save(user.get());
     }
 
     public String forgotPassword(String email) {

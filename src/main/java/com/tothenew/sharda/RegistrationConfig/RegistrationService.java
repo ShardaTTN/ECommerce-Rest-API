@@ -12,12 +12,15 @@ import com.tothenew.sharda.Service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,13 +39,15 @@ public class RegistrationService {
     ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     JavaMailSender javaMailSender;
+    @Autowired
+    MailSender mailSender;
 
     public String generateToken(User user) {
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now().plusMinutes(1),
                 user
             );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
@@ -52,36 +57,57 @@ public class RegistrationService {
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
                     .orElseThrow(() -> new InvalidTokenException("Token Not Found!"));
-            if (confirmationToken.getConfirmedAt() != null) {
-                throw new EmailAlreadyConfirmedException("Email already confirmed.");
-            }
-            LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-            if (expiredAt.isBefore(LocalDateTime.now())) {
-                throw new TokenExpiredException("Token expired!!");
-            }
-            confirmationTokenService.setConfirmedAt(token);
-            userService.enableUser(confirmationToken.getUser().getEmail());
-            return "confirmed";
-
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new EmailAlreadyConfirmedException("Email already confirmed.");
+        }
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Token expired!!");
+        }
+        confirmationTokenService.setConfirmedAt(token);
+        userService.enableUser(confirmationToken.getUser().getEmail());
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setSubject("Account Activated");
+        mailMessage.setText("Congratulations, Your account has been activated, Enjoy.");
+        mailMessage.setTo(confirmationToken.getUser().getEmail());
+        mailMessage.setFrom("sharda.kumari@tothenew.com");
+        Date date = new Date();
+        mailMessage.setSentDate(date);
+        try {
+            mailSender.send(mailMessage);
+        } catch (MailException e) {
+            log.info("Error sending mail");
+        }
+        return "Account activated.";
     }
 
     public String confirmByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         boolean userExists = userRepository.findByEmail(user.get().getEmail()).isPresent();
         if (userExists) {
-            ConfirmationToken confirmationToken = confirmationTokenRepository.getById(user.get().getId());
+            ConfirmationToken confirmationToken = confirmationTokenRepository.findByUserId(user.get().getId());
             if (confirmationToken.getConfirmedAt() != null) {
                 throw new EmailAlreadyConfirmedException("Email already confirmed.");
             }
-            LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-            if (expiredAt.isBefore(LocalDateTime.now())) {
-                throw new TokenExpiredException("Token expired!!");
+            String token = generateToken(user.get());
+
+            //Custom mail sending part
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setSubject("Re-activation Link");
+            mailMessage.setText("Here is your fresh activation link, it is valid for only 15 minutes.\n"+
+                    "http://localhost:8080/api/auth/confirm?token="+token);
+            mailMessage.setTo(confirmationToken.getUser().getEmail());
+            mailMessage.setFrom("sharda.kumari@tothenew.com");
+            Date date = new Date();
+            mailMessage.setSentDate(date);
+            try {
+                mailSender.send(mailMessage);
+            } catch (MailException e) {
+                log.info("Error sending mail");
             }
-            confirmationTokenService.setConfirmedAt(confirmationToken.getToken());
-            userService.enableUser(confirmationToken.getUser().getEmail());
-            return "Confirmed";
+            return "Email containing Re-activation link Sent";
         }
-        return "Not Confirmed";
+        return "Failed to send Email";
     }
 
     public ResponseEntity<?> confirmById(Long id) {

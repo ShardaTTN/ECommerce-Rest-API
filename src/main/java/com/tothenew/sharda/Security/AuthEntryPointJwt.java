@@ -1,9 +1,14 @@
 package com.tothenew.sharda.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tothenew.sharda.Model.User;
+import com.tothenew.sharda.Repository.UserRepository;
+import com.tothenew.sharda.Service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {

@@ -16,11 +16,15 @@ import com.tothenew.sharda.Repository.*;
 import com.tothenew.sharda.Security.JwtUtils;
 import com.tothenew.sharda.Service.RefreshTokenService;
 import com.tothenew.sharda.Service.UserDetailsImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,12 +37,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -61,6 +67,8 @@ public class AuthController {
     EmailSender emailSender;
     @Autowired
     RefreshTokenService refreshTokenService;
+    @Autowired
+    MailSender mailSender;
 
     @GetMapping("/home")
     public ResponseEntity<?> welcomeHome() {
@@ -95,10 +103,10 @@ public class AuthController {
 
         String token = registrationService.generateToken(user);
 
-        String link = "http://localhost:8080/api/signup/customer/confirm?token="+token;
+        String link = "http://localhost:8080/api/auth/confirm?token="+token;
         emailSender.send(signupCustomerDao.getEmail(), registrationService.buildEmail(signupCustomerDao.getFirstName(), link));
         return new ResponseEntity<>(
-                "Customer Registered Successfully!\nHere is your activation token use it with in 3 minutes\n"+token,
+                "Customer Registered Successfully!\nHere is your activation token use it with in 3 hours\n"+token,
                 HttpStatus.CREATED
         );
     }
@@ -123,13 +131,27 @@ public class AuthController {
         userRepository.save(user);
         sellerRepository.save(seller);
 
-        String token = registrationService.generateToken(user);
+//        String token = registrationService.generateToken(user);
+//
+//        String link = "http://localhost:8080/api/signup/seller/confirm?token="+token;
+//        emailSender.send(signupSellerDao.getEmail(), registrationService.buildEmail(signupSellerDao.getFirstName(), link));
 
-        String link = "http://localhost:8080/api/signup/seller/confirm?token="+token;
-        emailSender.send(signupSellerDao.getEmail(), registrationService.buildEmail(signupSellerDao.getFirstName(), link));
+        //Custom email testing part
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setSubject("Account Created");
+        mailMessage.setText("Congratulations, Your account has been created as Seller.\nContact Admin to activate your account, Thanks.");
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setFrom("sharda.kumari@tothenew.com");
+        Date date = new Date();
+        mailMessage.setSentDate(date);
+        try {
+            mailSender.send(mailMessage);
+        } catch (MailException e) {
+            log.info("Error sending mail");
+        }
 
         return new ResponseEntity<>(
-                "Seller Registered Successfully!\nAsk you Admin to activate your account!",
+                "Seller Registered Successfully!\nYour account is under approval process from Admin!",
                 HttpStatus.CREATED);
     }
 
@@ -143,7 +165,7 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(userDetails);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        String welcomeMessage = "Welcome back, Admin";
+        String welcomeMessage = "Welcome back";
 
         JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
         return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);

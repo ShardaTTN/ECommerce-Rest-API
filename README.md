@@ -14,7 +14,13 @@
 
 ###-seller's account can only be activated via Admin's end
 
+###-admin account created upon booting up the project
 
+###-role table gets populated also upon booting up the project
+
+###-Admin can fetch list of customers as well as sellers
+
+###-Admin can activate and de-activate anyone's account
 
 
 
