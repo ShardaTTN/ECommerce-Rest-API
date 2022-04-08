@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 @SpringBootApplication
@@ -57,5 +60,12 @@ public class SpringBootEcommerceApiApplication implements CommandLineRunner {
 		roleRepository.save(adminRole);
 		roleRepository.save(userRole);
 		roleRepository.save(sellerRole);
+	}
+
+	@Bean
+	public AcceptHeaderLocaleResolver localeResolver() {
+		AcceptHeaderLocaleResolver slr = new AcceptHeaderLocaleResolver();
+		slr.setDefaultLocale(Locale.US);
+		return slr;
 	}
 }
