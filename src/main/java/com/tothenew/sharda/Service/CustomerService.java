@@ -119,13 +119,54 @@ public class CustomerService {
             address.setState(addAddressDto.getState());
             address.setZipcode(addAddressDto.getZipcode());
             address.setLabel(addAddressDto.getLabel());
-            userRepository.save(user);
             addressRepository.save(address);
             log.info("Address added to the respected user");
             return new ResponseEntity<>("Added the address.", HttpStatus.CREATED);
         } else {
             log.info("Failed to add address.");
             return new ResponseEntity<>("Unable to add address!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<?> deleteAddress(String accessToken, Long id) {
+        AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = token.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (addressRepository.existsById(id)) {
+            log.info("Address exists.");
+            addressRepository.deleteById(id);
+            log.info("deletion successful");
+            return new ResponseEntity<>("Deleted Address Successfully.", HttpStatus.OK);
+        } else {
+            log.info("deletion failed!");
+            return new ResponseEntity<>(String.format("No address found with associating address id: ", id), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<?> updateAddress(Long id, AddAddressDto addAddressDto) {
+        String token = addAddressDto.getAccessToken();
+        AccessToken accessToken = accessTokenRepository.findByToken(token).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = accessToken.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (addressRepository.existsById(id)) {
+            log.info("address exists");
+            Address address = addressRepository.getById(id);
+            address.setAddressLine(addAddressDto.getAddress());
+            address.setLabel(addAddressDto.getLabel());
+            address.setZipcode(addAddressDto.getZipcode());
+            address.setCountry(addAddressDto.getCountry());
+            address.setState(addAddressDto.getState());
+            address.setCity(addAddressDto.getCity());
+            log.info("trying to save the updated address");
+            addressRepository.save(address);
+            return new ResponseEntity<>("Address updated successfully.", HttpStatus.OK);
+        } else {
+            log.info("No address exists");
+            return new ResponseEntity<>(String.format("No address exists with address id: "+id), HttpStatus.NOT_FOUND);
         }
     }
 }

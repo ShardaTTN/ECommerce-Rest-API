@@ -36,4 +36,14 @@ public class CustomerController {
     public ResponseEntity<?> addNewAddress(@Valid @RequestBody AddAddressDto addAddressDto) {
         return customerService.addNewAddress(addAddressDto);
     }
+
+    @DeleteMapping("/delete-address")
+    public ResponseEntity<?> deleteAddress(@RequestParam("accessToken") String accessToken, @RequestParam("addressId") Long id) {
+        return customerService.deleteAddress(accessToken, id);
+    }
+
+    @PutMapping("/update-address")
+    public ResponseEntity<?> updateAddress(@RequestParam("addressId") Long id, @RequestBody AddAddressDto addAddressDto) {
+        return customerService.updateAddress(id, addAddressDto);
+    }
 }

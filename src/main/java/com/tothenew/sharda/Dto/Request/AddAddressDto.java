@@ -3,6 +3,7 @@ package com.tothenew.sharda.Dto.Request;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 public class AddAddressDto {
@@ -23,6 +24,7 @@ public class AddAddressDto {
     private String country;
 
     @NotBlank(message = "Zip code cannot be blank")
+    @Size(min = 6, max = 6, message = "It should be exact 6 digits")
     private String zipcode;
 
     @NotBlank(message = "Label cannot be blank")
