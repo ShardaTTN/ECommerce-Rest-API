@@ -53,13 +53,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+//        customAuthenticationFilter.setFilterProcessesUrl("/api/auth/admin/login");
 //        http.cors().and().csrf().disable()
 //                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
@@ -73,10 +70,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
                         .antMatchers(HttpMethod.GET, "/api/admin/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.PUT, "/api/admin/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/api/customer/**").hasRole("CUSTOMER")
                         .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
                         .logoutSuccessUrl("/api/auth/home")
                                 .invalidateHttpSession(true)
                                         .deleteCookies("JSESSIONID");
+//        http.addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

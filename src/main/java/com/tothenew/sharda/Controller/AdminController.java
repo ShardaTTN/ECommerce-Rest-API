@@ -57,4 +57,19 @@ public class AdminController {
     public ResponseEntity<?> activateCustomer(@PathVariable("id") Long id) {
         return registrationService.confirmById(id);
     }
+
+    @PutMapping("/deactivate/customer/{id}")
+    public ResponseEntity<?> deactivateCustomer(@PathVariable("id") Long id) {
+        return registrationService.disableById(id);
+    }
+
+    @PutMapping("/activate/seller/{id}")
+    public ResponseEntity<?> activateSeller(@PathVariable("id") Long id) {
+        return registrationService.confirmById(id);
+    }
+
+    @PutMapping("/deactivate/seller/{id}")
+    public ResponseEntity<?> deactivateSeller(@PathVariable("id") Long id) {
+        return registrationService.disableById(id);
+    }
 }

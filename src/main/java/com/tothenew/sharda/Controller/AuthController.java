@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +70,10 @@ public class AuthController {
     RefreshTokenService refreshTokenService;
     @Autowired
     MailSender mailSender;
+    @Autowired
+    RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    AccessTokenRepository accessTokenRepository;
 
     @GetMapping("/home")
     public ResponseEntity<?> welcomeHome() {
@@ -122,6 +127,11 @@ public class AuthController {
         user.setEmail(signupSellerDao.getEmail());
         user.setPassword(passwordEncoder.encode(signupSellerDao.getPassword()));
         user.setLastName(signupSellerDao.getLastName());
+        user.setIsActive(false);
+        user.setIsDeleted(false);
+        user.setIsExpired(false);
+        user.setIsLocked(false);
+        user.setInvalidAttemptCount(0);
 
         Seller seller = new Seller(user, signupSellerDao.getGstNumber(), signupSellerDao.getCompanyContact(), signupSellerDao.getCompanyName());
 
@@ -158,85 +168,83 @@ public class AuthController {
     @PostMapping("/admin/login")
     public ResponseEntity<?> loginAsAdmin(@Valid @RequestBody LoginDao loginDao){
 
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String jwt = jwtUtils.generateJwtToken(userDetails);
+        User user = userRepository.findUserByEmail(loginDao.getEmail());
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        String welcomeMessage = "Welcome back";
+        if (userRepository.isUserActive(user.getId())) {
 
-        JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
-        return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            AccessToken accessToken = new AccessToken(jwtUtils.generateJwtToken(userDetails), LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
+            accessTokenRepository.save(accessToken);
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+            refreshTokenRepository.save(refreshToken);
+            String welcomeMessage = "Admin logged in Successfully!!";
+            return new ResponseEntity<>(welcomeMessage +"\nAccess Token: "+ accessToken.getToken()+"\nRefresh Token: "+refreshToken.getToken(), HttpStatus.OK);
+
+        } else {
+
+            return new ResponseEntity<>("Account is not activated, you cannot login!", HttpStatus.BAD_REQUEST);
+
+        }
 
     }
 
     @PostMapping("/customer/login")
     public ResponseEntity<?> loginAsCustomer(@Valid @RequestBody LoginDao loginDao){
 
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String jwt = jwtUtils.generateJwtToken(userDetails);
+        User user = userRepository.findUserByEmail(loginDao.getEmail());
 
+        if (userRepository.isUserActive(user.getId())) {
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        String welcomeMessage = "Customer logged in Successfully!!";
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            AccessToken accessToken = new AccessToken(jwtUtils.generateJwtToken(userDetails), LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
+            accessTokenRepository.save(accessToken);
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+            refreshTokenRepository.save(refreshToken);
+            String welcomeMessage = "Customer logged in Successfully!!";
+            return new ResponseEntity<>(welcomeMessage +"\nAccess Token: "+ accessToken.getToken()+"\nRefresh Token: "+refreshToken.getToken(), HttpStatus.OK);
 
-        JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
-        return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);
+        } else {
 
+            return new ResponseEntity<>("Account is not activated, you cannot login!", HttpStatus.BAD_REQUEST);
+
+        }
     }
 
     @PostMapping("/seller/login")
     public ResponseEntity<?> loginAsSeller(@Valid @RequestBody LoginDao loginDao){
 
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String jwt = jwtUtils.generateJwtToken(userDetails);
+        User user = userRepository.findUserByEmail(loginDao.getEmail());
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        String welcomeMessage = "Seller logged in Successfully!!";
+        if (userRepository.isUserActive(user.getId())) {
 
-        JwtResponse jwtResponse = new JwtResponse(jwt, refreshToken.getToken());
-        return new ResponseEntity<>(welcomeMessage +"\n"+ jwtResponse, HttpStatus.OK);
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginDao.getEmail(), loginDao.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            AccessToken accessToken = new AccessToken(jwtUtils.generateJwtToken(userDetails), LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
+            accessTokenRepository.save(accessToken);
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+            refreshTokenRepository.save(refreshToken);
+            String welcomeMessage = "Seller logged in Successfully!!";
+            return new ResponseEntity<>(welcomeMessage +"\nAccess Token: "+ accessToken.getToken()+"\nRefresh Token: "+refreshToken.getToken(), HttpStatus.OK);
+
+        } else {
+
+            return new ResponseEntity<>("Account is not activated, you cannot login!", HttpStatus.BAD_REQUEST);
+
+        }
 
     }
 
-//    @PostMapping("/signin")
-//    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDao loginRequest) {
-//        Authentication authentication = authenticationManager
-//                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-//        List<String> roles = userDetails.getAuthorities().stream()
-//                .map(item -> item.getAuthority())
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-//                .body(
-//                      new UserInfoResponse(userDetails.getId(),
-//                        userDetails.getEmail(),
-//                        roles));
-//    }
-
-//    @PostMapping("/logout")
-//    public String fetchSignoutSite(HttpServletRequest request, HttpServletResponse response) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-//
-//        return "redirect:/login?logout";
-//    }
 
 
-
-    @PostMapping("/refreshtoken")
+    @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
         String requestRefreshToken = request.getRefreshToken();
         return refreshTokenService.findByToken(requestRefreshToken)
@@ -244,7 +252,9 @@ public class AuthController {
                 .map(RefreshToken::getUser)
                 .map(user -> {
                     String token = jwtUtils.generateTokenFromUsername(user.getEmail());
-                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                    AccessToken accessToken = new AccessToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
+                    accessTokenRepository.save(accessToken);
+                    return new ResponseEntity<>("New Access Token: "+accessToken.getToken()+"\nRefresh Token: "+requestRefreshToken, HttpStatus.OK);
                 })
                 .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
                         "Refresh token is not in database!"));

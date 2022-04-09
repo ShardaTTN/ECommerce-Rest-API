@@ -19,6 +19,5 @@ public class JwtResponse {
     public JwtResponse(String accessToken, String refreshToken) {
         this.token = accessToken;
         this.refreshToken = refreshToken;
-
     }
 }

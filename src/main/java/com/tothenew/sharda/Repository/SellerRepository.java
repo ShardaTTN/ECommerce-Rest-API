@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 
-    @Query(value = "SELECT a.company_contact, a.company_name from Sellers a WHERE a.user_id = (select :userid from users)", nativeQuery = true)
-    List<Object[]> loadPartialData(@Param("userid") int id);
+    @Query(value = "SELECT a.company_contact, a.company_name from Sellers a WHERE a.user_id = (select ?1 from users)", nativeQuery = true)
+    List<Object[]> loadPartialData(Long id);
 
 }

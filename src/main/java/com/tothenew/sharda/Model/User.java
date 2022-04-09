@@ -46,13 +46,5 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Customer> customers;
-//
-//    public void activate() {
-//        this.active = true;
-//    }
-//
-//    public void deactivate() {
-//        this.active = false;
-//    }
 
 }

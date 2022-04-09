@@ -47,7 +47,7 @@ public class RegistrationService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(1),
+                LocalDateTime.now().plusMinutes(180),
                 user
             );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
@@ -119,12 +119,20 @@ public class RegistrationService {
                 User user = userRepository.getById(id);
                 user.setIsActive(true);
                 userRepository.save(user);
+
                 //Mail Part
-//                SimpleMailMessage mailMessage = new SimpleMailMessage();
-//                mailMessage.setTo(user.getEmail());
-//                mailMessage.setSubject("Account Activation");
-//                mailMessage.setText("This mail is to inform you that your account has been activated by Admin. Keep your smile up. :)");
-//                javaMailSender.send(mailMessage);
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setSubject("Account Activated by Admin");
+                mailMessage.setText("Your account has been activated by Admin, Enjoy.:)");
+                mailMessage.setTo(user.getEmail());
+                mailMessage.setFrom("sharda.kumari@tothenew.com");
+                Date date = new Date();
+                mailMessage.setSentDate(date);
+                try {
+                    mailSender.send(mailMessage);
+                } catch (MailException e) {
+                    log.info("Error sending mail");
+                }
                 log.info("User activated!!");
             }
         } else {
@@ -133,6 +141,41 @@ public class RegistrationService {
         }
         return ResponseEntity.ok().body(String.format("User activated with this user id: %s", id));
     }
+
+
+    public ResponseEntity<?> disableById(Long id) {
+        if (userRepository.existsById(id)) {
+            log.info("User exists.");
+            if (!userRepository.isUserActive(id)) {
+                return ResponseEntity.ok("Already de-activated User.");
+            } else {
+                User user = userRepository.getById(id);
+                user.setIsActive(false);
+                userRepository.save(user);
+
+                //Mail Part
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setSubject("Account De-activated by Admin");
+                mailMessage.setText("Your account has been de-activated by Admin.\nKindly contact admin to activate your account, Thanks.");
+                mailMessage.setTo(user.getEmail());
+                mailMessage.setFrom("sharda.kumari@tothenew.com");
+                Date date = new Date();
+                mailMessage.setSentDate(date);
+                try {
+                    mailSender.send(mailMessage);
+                } catch (MailException e) {
+                    log.info("Error sending mail");
+                }
+                log.info("User de-activated!!");
+            }
+        } else {
+            log.info("No User exists!!");
+            return ResponseEntity.badRequest().body(String.format("No user exists with this user id: %s", id));
+        }
+        return ResponseEntity.ok().body(String.format("User de-activated with this user id: %s", id));
+    }
+
+
 
     public String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
