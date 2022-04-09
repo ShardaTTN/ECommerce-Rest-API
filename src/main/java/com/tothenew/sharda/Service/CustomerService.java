@@ -1,5 +1,6 @@
 package com.tothenew.sharda.Service;
 
+import com.tothenew.sharda.Dto.Request.ChangePasswordDto;
 import com.tothenew.sharda.Exception.TokenExpiredException;
 import com.tothenew.sharda.Model.AccessToken;
 import com.tothenew.sharda.Model.User;
@@ -10,9 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 @Transactional
@@ -25,6 +31,10 @@ public class CustomerService {
     UserRepository userRepository;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    MailSender mailSender;
 
     public ResponseEntity<?> viewMyProfile(String accessToken) {
         AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
@@ -34,5 +44,35 @@ public class CustomerService {
         }
         User user = userRepository.findUserByEmail(token.getUser().getEmail());
         return new ResponseEntity<>("Customer User Id: "+user.getId()+"\nCustomer First name: "+user.getFirstName()+"\nCustomer Last name: "+user.getLastName()+"\nCustomer active status: "+user.getIsActive()+"\nCustomer contact: "+customerRepository.getContactOfUserId(user.getId()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> changePassword(ChangePasswordDto changePasswordDto) {
+        String token = changePasswordDto.getAccessToken();
+        AccessToken accessToken = accessTokenRepository.findByToken(token).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = accessToken.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (userRepository.existsByEmail(accessToken.getUser().getEmail())) {
+            User user = userRepository.findUserByEmail(accessToken.getUser().getEmail());
+            user.setPassword(passwordEncoder.encode(changePasswordDto.getPassword()));
+            log.info("Changed password and encoded, then saved it.");
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setSubject("Password Changed");
+            mailMessage.setText("ALERT!, Your account's password has been changed, If it was not you contact Admin asap.\nStay Safe, Thanks.");
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setFrom("sharda.kumari@tothenew.com");
+            Date date = new Date();
+            mailMessage.setSentDate(date);
+            try {
+                mailSender.send(mailMessage);
+            } catch (MailException e) {
+                log.info("Error sending mail");
+            }
+            return new ResponseEntity<>("Changed Password Successfully!", HttpStatus.OK);
+        } else  {
+            log.info("Failed to change password!");
+            return new ResponseEntity<>("Failed to change password!", HttpStatus.BAD_REQUEST);
+        }
     }
 }
