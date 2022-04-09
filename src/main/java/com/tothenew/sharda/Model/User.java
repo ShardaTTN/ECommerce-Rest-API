@@ -47,7 +47,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Customer> customers;
 
-    @Embedded
-    private Address address;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Address> address;
+
 
 }
