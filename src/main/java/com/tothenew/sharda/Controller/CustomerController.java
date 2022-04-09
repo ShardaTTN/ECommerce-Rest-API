@@ -1,5 +1,6 @@
 package com.tothenew.sharda.Controller;
 
+import com.tothenew.sharda.Dto.Request.AddAddressDto;
 import com.tothenew.sharda.Dto.Request.ChangePasswordDto;
 import com.tothenew.sharda.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,18 @@ public class CustomerController {
         return customerService.viewMyProfile(accessToken);
     }
 
+    @GetMapping("/my-addresses")
+    public ResponseEntity<?> viewMyAddresses(@RequestParam("accessToken") String accessToken) {
+        return customerService.viewMyAddresses(accessToken);
+    }
+
     @PutMapping("/change-password")
     public ResponseEntity<?> changeMyPassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
         return customerService.changePassword(changePasswordDto);
+    }
+
+    @PostMapping("/add-address")
+    public ResponseEntity<?> addNewAddress(@Valid @RequestBody AddAddressDto addAddressDto) {
+        return customerService.addNewAddress(addAddressDto);
     }
 }
