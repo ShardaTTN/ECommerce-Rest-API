@@ -29,7 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    CustomLoginFailureHandler loginFailureHandler;
+
 
 
     @Bean
@@ -68,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and().authorizeRequests()
                         .antMatchers(HttpMethod.GET, "/api/admin/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.PUT, "/api/admin/**").hasRole("ADMIN")

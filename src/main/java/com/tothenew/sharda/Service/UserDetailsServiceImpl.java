@@ -25,6 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public static final int MAX_FAILED_ATTEMPTS = 3;
     private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
+    private static final long LOCK_TIME_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
     @Autowired
     UserRepository userRepository;
@@ -63,8 +64,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public void lock(Optional<User> user) {
-        user.get().setIsLocked(true);
+        user.get().setAccountNonLocked(false);
+        user.get().setLockTime(new Date());
         userRepository.save(user.get());
+    }
+
+    public boolean unlockWhenTimeExpired(User user) {
+        long lockTimeInMillis = user.getLockTime().getTime();
+        long currentTimeInMillis = System.currentTimeMillis();
+
+        if (lockTimeInMillis + LOCK_TIME_DURATION < currentTimeInMillis) {
+            user.setAccountNonLocked(true);
+            user.setLockTime(null);
+            user.setFailedAttempt(0);
+
+            userRepository.save(user);
+
+            return true;
+        }
+
+        return false;
     }
 
     public String forgotPassword(String email) {

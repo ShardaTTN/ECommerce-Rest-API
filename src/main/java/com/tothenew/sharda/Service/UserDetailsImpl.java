@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
+    private User user;
 
     private static final long serialVersionUID = 1L;
     private Long id;
@@ -61,7 +62,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+
+        return user.isAccountNonLocked();
     }
 
     @Override
