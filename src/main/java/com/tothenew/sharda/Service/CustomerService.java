@@ -2,9 +2,11 @@ package com.tothenew.sharda.Service;
 
 import com.tothenew.sharda.Dto.Request.AddAddressDto;
 import com.tothenew.sharda.Dto.Request.ChangePasswordDto;
+import com.tothenew.sharda.Dto.Request.UpdateCustomerDto;
 import com.tothenew.sharda.Exception.TokenExpiredException;
 import com.tothenew.sharda.Model.AccessToken;
 import com.tothenew.sharda.Model.Address;
+import com.tothenew.sharda.Model.Customer;
 import com.tothenew.sharda.Model.User;
 import com.tothenew.sharda.Repository.AccessTokenRepository;
 import com.tothenew.sharda.Repository.AddressRepository;
@@ -20,6 +22,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
@@ -42,6 +51,10 @@ public class CustomerService {
     MailSender mailSender;
     @Autowired
     AddressRepository addressRepository;
+    @Autowired
+    HttpServletRequest request;
+    @Autowired
+    FileUploaderForUsersUtil fileUploaderForUsersUtil;
 
     public ResponseEntity<?> viewMyProfile(String accessToken) {
         AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
@@ -167,6 +180,78 @@ public class CustomerService {
         } else {
             log.info("No address exists");
             return new ResponseEntity<>(String.format("No address exists with address id: "+id), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity<?> updateMyProfile(UpdateCustomerDto updateCustomerDto) {
+        String token = updateCustomerDto.getAccessToken();
+        AccessToken accessToken = accessTokenRepository.findByToken(token).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = accessToken.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (userRepository.existsByEmail(accessToken.getUser().getEmail())) {
+            log.info("User exists.");
+            User user = userRepository.findUserByEmail(accessToken.getUser().getEmail());
+            user.setFirstName(updateCustomerDto.getFirstName());
+            user.setMiddleName(updateCustomerDto.getMiddleName());
+            user.setLastName(updateCustomerDto.getLastName());
+            user.setEmail(updateCustomerDto.getEmail());
+            Customer customer = customerRepository.getCustomerByUserId(user.getId());
+            customer.setContact(updateCustomerDto.getContact());
+            userRepository.save(user);
+            customerRepository.save(customer);
+            log.info("user updated!");
+
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setSubject("Profile Updated");
+            mailMessage.setText("ALERT!, Your profile has been updated, If it was not you contact Admin asap.\nStay Safe, Thanks.");
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setFrom("sharda.kumari@tothenew.com");
+            Date date = new Date();
+            mailMessage.setSentDate(date);
+            try {
+                mailSender.send(mailMessage);
+            } catch (MailException e) {
+                log.info("Error sending mail");
+            }
+            return new ResponseEntity<>("User profile updated!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Could not update the profile!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<?> uploadImage(String accessToken, MultipartFile multipartFile) {
+        AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = token.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (userRepository.existsByEmail(token.getUser().getEmail())) {
+            log.info("User exists.");
+            User user = userRepository.findUserByEmail(token.getUser().getEmail());
+
+            try {
+                if (multipartFile.isEmpty()) {
+                    log.info("Empty file");
+                    return new ResponseEntity<>("Image cannot be empty!!", HttpStatus.BAD_REQUEST);
+                }
+                if (!multipartFile.getContentType().equalsIgnoreCase("image/jpeg") ||
+                        !multipartFile.getContentType().equalsIgnoreCase("image/jpg") ||
+                        !multipartFile.getContentType().equalsIgnoreCase("image/png") ||
+                        !multipartFile.getContentType().equalsIgnoreCase("image/bmp")) {
+
+                    log.info("Illegal image format.");
+                    return new ResponseEntity<>("Only JPEG,JPG,PNG & BMP extensions are allowed!!", HttpStatus.BAD_REQUEST);
+                }
+                Files.copy(multipartFile.getInputStream(), Paths.get(FileUploaderForUsersUtil.UPLOAD_DIR+File.separator+multipartFile.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                log.info("Image uploaded!");
+            } catch (Exception exception) {
+                log.error("Cannot upload image!");
+            }
+            return new ResponseEntity<>("Updated the profile with latest image provided.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Could not load the image!", HttpStatus.BAD_REQUEST);
         }
     }
 }

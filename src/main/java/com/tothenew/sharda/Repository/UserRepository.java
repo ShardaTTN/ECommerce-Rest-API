@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByPasswordResetToken(String token);
     User findUserByEmail(String email);
 
-    @Query(value = "SELECT a.is_active from Users a WHERE a.id = ?1", nativeQuery = true)
+    @Query(value = "SELECT a.is_active from users a WHERE a.id = ?1", nativeQuery = true)
     Boolean isUserActive(Long id);
 
     @Transactional
@@ -42,9 +42,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void updateInvalidAttemptCount(Integer invalidAttemptCount, String email);
 
 
-    @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active FROM Users a WHERE a.id = (SELECT user_id from USER_ROLES where role_id = 2)", nativeQuery = true)
+    @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active FROM users a WHERE a.id = (SELECT user_id from user_roles where role_id = 2)", nativeQuery = true)
     List<Object[]> printPartialDataForCustomers();
 
-    @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active FROM Users a WHERE a.id = (SELECT user_id from USER_ROLES where role_id = 3)", nativeQuery = true)
+    @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active, b.company_contact, b.company_name FROM users a, sellers b WHERE a.id = (SELECT user_id from user_roles where role_id = 3) AND b.user_id = (SELECT user_id from user_roles where role_id = 3)", nativeQuery = true)
     List<Object[]> printPartialDataForSellers();
 }

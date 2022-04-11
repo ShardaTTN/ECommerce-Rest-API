@@ -1,13 +1,9 @@
 package com.tothenew.sharda.Service;
 
-import com.tothenew.sharda.Model.Customer;
 import com.tothenew.sharda.Model.Role;
 import com.tothenew.sharda.Model.User;
 import com.tothenew.sharda.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -128,10 +125,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Duration diff = Duration.between(tokenCreationDate, now);
 
         return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
-    }
-
-    public List<User> getAllUsers() {
-        return getAllUsers();
     }
 
 }

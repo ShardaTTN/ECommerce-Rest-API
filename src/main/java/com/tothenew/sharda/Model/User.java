@@ -1,7 +1,6 @@
 package com.tothenew.sharda.Model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -50,5 +49,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Address> address;
 
+    @Lob
+    private byte[] image;
 
 }

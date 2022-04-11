@@ -49,7 +49,6 @@ public class AdminController {
     public @ResponseBody List<Object[]> returnSellers() {
         List<Object[]> list = new ArrayList<>();
         list.addAll(userRepository.printPartialDataForSellers());
-//        list.addAll(sellerRepository.loadPartialData(1));
         return list;
     }
 

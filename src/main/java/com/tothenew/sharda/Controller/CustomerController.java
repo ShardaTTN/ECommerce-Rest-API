@@ -2,10 +2,14 @@ package com.tothenew.sharda.Controller;
 
 import com.tothenew.sharda.Dto.Request.AddAddressDto;
 import com.tothenew.sharda.Dto.Request.ChangePasswordDto;
+import com.tothenew.sharda.Dto.Request.UpdateCustomerDto;
 import com.tothenew.sharda.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -45,5 +49,15 @@ public class CustomerController {
     @PutMapping("/update-address")
     public ResponseEntity<?> updateAddress(@RequestParam("addressId") Long id, @RequestBody AddAddressDto addAddressDto) {
         return customerService.updateAddress(id, addAddressDto);
+    }
+
+    @PostMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
+        return customerService.updateMyProfile(updateCustomerDto);
+    }
+
+    @PostMapping(value = "/upload-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadImage(@RequestParam("accessToken") String accessToken, @RequestParam("image") MultipartFile multipartFile) {
+        return customerService.uploadImage(accessToken, multipartFile);
     }
 }
