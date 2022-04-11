@@ -47,4 +47,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT a.id, a.first_name, a.last_name, a.email, a.is_active FROM Users a WHERE a.id = (SELECT user_id from USER_ROLES where role_id = 3)", nativeQuery = true)
     List<Object[]> printPartialDataForSellers();
+
+    @Query("UPDATE User u SET u.failedAttempt = ?1 WHERE u.email = ?2")
+    @Modifying
+    public void updateFailedAttempts(int failAttempts, String email);
+
 }
+
+
+

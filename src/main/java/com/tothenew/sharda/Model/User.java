@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -32,6 +33,12 @@ public class User {
     private String passwordResetToken;
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime tokenCreationDate;
+    @Column(name = "failed_attempt")
+    private int failedAttempt;
+    @Column(name = "lock_time")
+    private Date lockTime;
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked;
 
 
 
