@@ -43,10 +43,6 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                     exception = new LockedException("Your account has been locked due to 3 failed attempts."
                             + " Contact Admin to remove lock on your account.");
                 }
-            } else if (!user.isAccountNonLocked()) {
-                if (userDetailsService.unlockWhenTimeExpired(user)) {
-                    exception = new LockedException("Your account has been unlocked. Please try to login again.");
-                }
             }
         }
 

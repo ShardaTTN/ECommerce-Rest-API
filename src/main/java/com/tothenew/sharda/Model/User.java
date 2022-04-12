@@ -34,12 +34,6 @@ public class User {
     private LocalDateTime tokenCreationDate;
     @Column(name = "failed_attempt")
     private int failedAttempt;
-    @Column(name = "lock_time")
-    private Date lockTime;
-    @Column(name = "account_non_locked")
-    private boolean accountNonLocked;
-
-
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
