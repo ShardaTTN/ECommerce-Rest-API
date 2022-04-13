@@ -20,6 +20,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -53,14 +54,16 @@ public class SellerService {
             log.info("User exists!");
             User user = userRepository.findUserByEmail(token.getUser().getEmail());
             List<Object[]> list = addressRepository.findByUserId(user.getId());
+            Address address = addressRepository.findByUId(user.getId());
             log.info("returning a list of objects.");
-            return new ResponseEntity<>("Seller User Id: "+user.getId()+"\nSeller First name: "+user.getFirstName()+"\nSeller Last name: "+user.getLastName()+"\nSeller active status: "+user.getIsActive()+"\nSeller companyContact: "+sellerRepository.getCompanyContactOfUserId(user.getId())+"\nSeller companyName: "+sellerRepository.getCompanyNameOfUserId(user.getId())+"\nSeller gstNumber: "+sellerRepository.getGstNumberOfUserId(user.getId())+"\nAddress: "+list, HttpStatus.OK);
+            return new ResponseEntity<>("Seller User Id: "+user.getId()+"\nSeller First name: "+user.getFirstName()+"\nSeller Last name: "+user.getLastName()+"\nSeller active status: "+user.getIsActive()+"\nSeller companyContact: "+sellerRepository.getCompanyContactOfUserId(user.getId())+"\nSeller companyName: "+sellerRepository.getCompanyNameOfUserId(user.getId())+"\nSeller gstNumber: "+sellerRepository.getGstNumberOfUserId(user.getId())+"\nSeller Address: \n"+address.toString(), HttpStatus.OK);
         } else {
             log.info("Couldn't find address related to user!!!");
             return new ResponseEntity<>("Error fetching addresses", HttpStatus.NOT_FOUND);
         }
 
     }
+
 
     public ResponseEntity<?> updateSellerProfile(UpdateSellerDto updateSellerDto) {
         String token = updateSellerDto.getAccessToken();
@@ -139,38 +142,40 @@ public class SellerService {
         if (expiredAt.isBefore(LocalDateTime.now())) {
             throw new TokenExpiredException("Access Token expired!!");
         }
-         if (addressRepository.existsById(id)) {
-            log.info("address exists");
-            Address address = addressRepository.getById(id);
-            address.setAddressLine(addAddressDto.getAddress());
-            address.setLabel(addAddressDto.getLabel());
-            address.setZipcode(addAddressDto.getZipcode());
-            address.setCountry(addAddressDto.getCountry());
-            address.setState(addAddressDto.getState());
-            address.setCity(addAddressDto.getCity());
-            log.info("trying to save the updated address");
-            addressRepository.save(address);
-            return new ResponseEntity<>("Address updated successfully.", HttpStatus.OK);
-        }  else if (userRepository.existsByEmail(accessToken.getUser().getEmail())) {
+
+        if (userRepository.existsByEmail(accessToken.getUser().getEmail())) {
             User user = userRepository.findUserByEmail(accessToken.getUser().getEmail());
             log.info("user exists");
-            Address address = new Address();
-            address.setUser(user);
-            address.setAddressLine(addAddressDto.getAddress());
-            address.setCity(addAddressDto.getCity());
-            address.setCountry(addAddressDto.getCountry());
-            address.setState(addAddressDto.getState());
-            address.setZipcode(addAddressDto.getZipcode());
-            address.setLabel(addAddressDto.getLabel());
-            addressRepository.save(address);
-            log.info("Address added to the respected user");
-            return new ResponseEntity<>("Added the address.", HttpStatus.CREATED);
-        }
-         else {
+
+            if (addressRepository.existsById(id)) {
+                log.info("address exists");
+                Address address = addressRepository.getById(id);
+                address.setAddressLine(addAddressDto.getAddress());
+                address.setLabel(addAddressDto.getLabel());
+                address.setZipcode(addAddressDto.getZipcode());
+                address.setCountry(addAddressDto.getCountry());
+                address.setState(addAddressDto.getState());
+                address.setCity(addAddressDto.getCity());
+                log.info("trying to save the updated address");
+                addressRepository.save(address);
+                return new ResponseEntity<>("Address updated successfully.", HttpStatus.OK);
+            } else {
+                Address address = new Address();
+                address.setUser(user);
+                address.setAddressLine(addAddressDto.getAddress());
+                address.setCity(addAddressDto.getCity());
+                address.setCountry(addAddressDto.getCountry());
+                address.setState(addAddressDto.getState());
+                address.setZipcode(addAddressDto.getZipcode());
+                address.setLabel(addAddressDto.getLabel());
+                addressRepository.save(address);
+                log.info("Address added to the respected user");
+                return new ResponseEntity<>("Added the address.", HttpStatus.CREATED);
+            }
+        } else {
             log.info("No address exists");
             return new ResponseEntity<>(String.format("No address exists with address id: "+id), HttpStatus.NOT_FOUND);
         }
     }
-
 
 }

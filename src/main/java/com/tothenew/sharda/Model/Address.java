@@ -2,6 +2,7 @@ package com.tothenew.sharda.Model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 import javax.persistence.*;
@@ -25,4 +26,9 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Override
+    public String toString() {
+        return "\tCity: "+city+"\n\tState: "+state+"\n\tCountry: "+country+"\n\tAddress Line: "+addressLine+"\n\tZip Code: "+zipcode;
+    }
 }
