@@ -66,23 +66,7 @@ public class CustomerService {
         return new ResponseEntity<>("Customer User Id: "+user.getId()+"\nCustomer First name: "+user.getFirstName()+"\nCustomer Last name: "+user.getLastName()+"\nCustomer active status: "+user.getIsActive()+"\nCustomer contact: "+customerRepository.getContactOfUserId(user.getId()), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> viewMyAddresses(String accessToken) {
-        AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
-        LocalDateTime expiredAt = token.getExpiresAt();
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException("Access Token expired!!");
-        }
-        if (userRepository.existsByEmail(token.getUser().getEmail())) {
-            log.info("User exists!");
-            User user = userRepository.findUserByEmail(token.getUser().getEmail());
-            List<Object[]> list = addressRepository.findByUserId(user.getId());
-            log.info("returning a list of objects.");
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } else {
-            log.info("Couldn't find address related to user!!!");
-            return new ResponseEntity<>("Error fetching addresses", HttpStatus.NOT_FOUND);
-        }
-    }
+
 
     public ResponseEntity<?> changePassword(ChangePasswordDto changePasswordDto) {
         String token = changePasswordDto.getAccessToken();
@@ -141,23 +125,6 @@ public class CustomerService {
         }
     }
 
-    public ResponseEntity<?> deleteAddress(String accessToken, Long id) {
-        AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
-        LocalDateTime expiredAt = token.getExpiresAt();
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException("Access Token expired!!");
-        }
-        if (addressRepository.existsById(id)) {
-            log.info("Address exists.");
-            addressRepository.deleteById(id);
-            log.info("deletion successful");
-            return new ResponseEntity<>("Deleted Address Successfully.", HttpStatus.OK);
-        } else {
-            log.info("deletion failed!");
-            return new ResponseEntity<>(String.format("No address found with associating address id: ", id), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public ResponseEntity<?> updateAddress(Long id, AddAddressDto addAddressDto) {
         String token = addAddressDto.getAccessToken();
         AccessToken accessToken = accessTokenRepository.findByToken(token).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
@@ -182,6 +149,44 @@ public class CustomerService {
             return new ResponseEntity<>(String.format("No address exists with address id: "+id), HttpStatus.NOT_FOUND);
         }
     }
+
+    public ResponseEntity<?> deleteAddress(String accessToken, Long id) {
+        AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = token.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (addressRepository.existsById(id)) {
+            log.info("Address exists.");
+            addressRepository.deleteById(id);
+            log.info("deletion successful");
+            return new ResponseEntity<>("Deleted Address Successfully.", HttpStatus.OK);
+        } else {
+            log.info("deletion failed!");
+            return new ResponseEntity<>(String.format("No address found with associating address id: ", id), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<?> viewMyAddresses(String accessToken) {
+        AccessToken token = accessTokenRepository.findByToken(accessToken).orElseThrow(() -> new IllegalStateException("Invalid Access Token!"));
+        LocalDateTime expiredAt = token.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new TokenExpiredException("Access Token expired!!");
+        }
+        if (userRepository.existsByEmail(token.getUser().getEmail())) {
+            log.info("User exists!");
+            User user = userRepository.findUserByEmail(token.getUser().getEmail());
+            List<Object[]> list = addressRepository.findByUserId(user.getId());
+            log.info("returning a list of objects.");
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else {
+            log.info("Couldn't find address related to user!!!");
+            return new ResponseEntity<>("Error fetching addresses", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 
     public ResponseEntity<?> updateMyProfile(UpdateCustomerDto updateCustomerDto) {
         String token = updateCustomerDto.getAccessToken();

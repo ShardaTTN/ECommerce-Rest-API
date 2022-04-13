@@ -77,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers(HttpMethod.PUT, "/api/admin/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET, "/api/customer/**").hasRole("CUSTOMER")
                         .antMatchers(HttpMethod.GET, "/api/seller/**").hasRole("SELLER")
+                        .antMatchers(HttpMethod.GET, "/api/address/**").hasAnyRole("SELLER","CUSTOMER")
                         .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
                         .logoutSuccessUrl("/api/auth/home")
                                 .invalidateHttpSession(true)

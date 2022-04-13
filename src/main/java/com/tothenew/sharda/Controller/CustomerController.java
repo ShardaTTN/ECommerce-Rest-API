@@ -26,24 +26,9 @@ public class CustomerController {
         return customerService.viewMyProfile(accessToken);
     }
 
-    @GetMapping("/my-addresses")
-    public ResponseEntity<?> viewMyAddresses(@RequestParam("accessToken") String accessToken) {
-        return customerService.viewMyAddresses(accessToken);
-    }
-
-    @PutMapping("/change-password")
-    public ResponseEntity<?> changeMyPassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
-        return customerService.changePassword(changePasswordDto);
-    }
-
     @PostMapping("/add-address")
     public ResponseEntity<?> addNewAddress(@Valid @RequestBody AddAddressDto addAddressDto) {
         return customerService.addNewAddress(addAddressDto);
-    }
-
-    @DeleteMapping("/delete-address")
-    public ResponseEntity<?> deleteAddress(@RequestParam("accessToken") String accessToken, @RequestParam("addressId") Long id) {
-        return customerService.deleteAddress(accessToken, id);
     }
 
     @PutMapping("/update-address")
@@ -51,7 +36,27 @@ public class CustomerController {
         return customerService.updateAddress(id, addAddressDto);
     }
 
-    @PostMapping("/update-profile")
+    @DeleteMapping("/delete-address")
+    public ResponseEntity<?> deleteAddress(@RequestParam("accessToken") String accessToken, @RequestParam("addressId") Long id) {
+        return customerService.deleteAddress(accessToken, id);
+    }
+
+    @GetMapping("/my-addresses")
+    public ResponseEntity<?> viewMyAddresses(@RequestParam("accessToken") String accessToken) {
+        return customerService.viewMyAddresses(accessToken);
+    }
+
+
+
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changeMyPassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
+        return customerService.changePassword(changePasswordDto);
+    }
+
+
+
+
+    @PutMapping("/update-profile")
     public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
         return customerService.updateMyProfile(updateCustomerDto);
     }
