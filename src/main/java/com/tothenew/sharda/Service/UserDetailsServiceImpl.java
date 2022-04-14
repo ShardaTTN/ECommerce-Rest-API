@@ -1,9 +1,14 @@
 package com.tothenew.sharda.Service;
 
+import com.tothenew.sharda.Model.PasswordResetToken;
 import com.tothenew.sharda.Model.Role;
 import com.tothenew.sharda.Model.User;
+import com.tothenew.sharda.RegistrationConfig.Token.ConfirmationToken;
+import com.tothenew.sharda.Repository.PasswordResetTokenRepository;
 import com.tothenew.sharda.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +34,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
 
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
@@ -68,23 +75,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.save(user.get());
     }
 
-    public String forgotPassword(String email) {
-
-        Optional<User> userOptional = Optional
-                .ofNullable(userRepository.findUserByEmail(email));
-
-        if (!userOptional.isPresent()) {
-            return "Invalid email id.";
-        }
-
-        User user = userOptional.get();
-        user.setPasswordResetToken(generateToken());
-        user.setTokenCreationDate(LocalDateTime.now());
-
-        user = userRepository.save(user);
-
-        return user.getPasswordResetToken();
-    }
 
     public String resetPassword(String token, String password) {
 
@@ -111,13 +101,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.save(user);
 
         return "Your password successfully updated.";
-    }
-
-    private String generateToken() {
-        StringBuilder token = new StringBuilder();
-
-        return token.append(UUID.randomUUID().toString())
-                .append(UUID.randomUUID().toString()).toString();
     }
 
     private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
