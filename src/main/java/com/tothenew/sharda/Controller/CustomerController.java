@@ -61,8 +61,8 @@ public class CustomerController {
         return customerService.updateMyProfile(updateCustomerDto);
     }
 
-    @PostMapping(value = "/upload-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadImage(@RequestParam("accessToken") String accessToken, @RequestParam("image") MultipartFile multipartFile) {
+    @PostMapping(value = "/upload-image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> uploadImage(@RequestParam("accessToken") String accessToken, @RequestPart("image") MultipartFile multipartFile) {
         return customerService.uploadImage(accessToken, multipartFile);
     }
 }

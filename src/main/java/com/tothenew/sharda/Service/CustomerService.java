@@ -25,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
@@ -241,15 +243,43 @@ public class CustomerService {
                     log.info("Empty file");
                     return new ResponseEntity<>("Image cannot be empty!!", HttpStatus.BAD_REQUEST);
                 }
-                if (!multipartFile.getContentType().equalsIgnoreCase("image/jpeg") ||
-                        !multipartFile.getContentType().equalsIgnoreCase("image/jpg") ||
-                        !multipartFile.getContentType().equalsIgnoreCase("image/png") ||
-                        !multipartFile.getContentType().equalsIgnoreCase("image/bmp")) {
+                if (!multipartFile.getContentType().equals("image/jpeg") &&
+                        !multipartFile.getContentType().equals("image/png") &&
+                        !multipartFile.getContentType().equals("image/bmp")) {
 
                     log.info("Illegal image format.");
                     return new ResponseEntity<>("Only JPEG,JPG,PNG & BMP extensions are allowed!!", HttpStatus.BAD_REQUEST);
                 }
-                Files.copy(multipartFile.getInputStream(), Paths.get(FileUploaderForUsersUtil.UPLOAD_DIR+File.separator+multipartFile.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                String fileName = multipartFile.getOriginalFilename();
+                log.info("Old name: " + fileName);
+                String[] fileNameSplits = fileName.split("\\.");
+                int extensionIndex = fileNameSplits.length - 1;
+                String newName = user.getId()+"."+fileNameSplits[extensionIndex];
+                log.info("New name: " + newName);
+
+                //Check if profile image already exists
+
+//                File file = new File(FileUploaderForUsersUtil.UPLOAD_DIR);
+//                File[] files = file.listFiles((dir1, name) -> name.startsWith(user.getId().toString()));
+
+
+                //1. Read file
+
+                //2. Check if file's name starts with or contains user's id
+
+                //3. Delete existing file
+
+                //4. Copy new image
+
+
+//                if (Files.deleteIfExists(Paths.get(FileUploaderForUsersUtil.UPLOAD_DIR+File.separator+newName))) {
+//                    log.info("deleted duplicate image");
+//                } else {
+//                    Files.copy(multipartFile.getInputStream(), Paths.get(FileUploaderForUsersUtil.UPLOAD_DIR+File.separator+newName), StandardCopyOption.REPLACE_EXISTING);
+//                }
+                Files.copy(multipartFile.getInputStream(), Paths.get(FileUploaderForUsersUtil.UPLOAD_DIR+File.separator+newName), StandardCopyOption.REPLACE_EXISTING);
+
+
                 log.info("Image uploaded!");
             } catch (Exception exception) {
                 log.error("Cannot upload image!");
