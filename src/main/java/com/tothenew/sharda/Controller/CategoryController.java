@@ -17,4 +17,9 @@ public class CategoryController {
     public ResponseEntity<?> addCategory(@RequestParam("categoryName") String categoryName, @RequestParam(required = false, value = "parentId") Long parentCategoryId) {
         return categoryService.addCategory(categoryName, parentCategoryId);
     }
+
+    @PostMapping("/add-categoryMetadata-field")
+    public ResponseEntity<?> addCategoryMetadataField(@RequestParam("fieldName") String fieldName) {
+        return categoryService.addMetadataField(fieldName);
+    }
 }
