@@ -47,9 +47,9 @@ public class CategoryService {
             } else {
                 Category category = new Category();
                 category.setName(categoryName);
-                categoryRepository.save(category);
+                category = categoryRepository.save(category);
                 log.info("created main category");
-                return new ResponseEntity<>(String.format("Parent category created: "+category.getName()), HttpStatus.CREATED);
+                return new ResponseEntity<>(String.format("Parent category created with ID: "+category.getId()), HttpStatus.CREATED);
             }
         }
     }
