@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     public static final int MAX_FAILED_ATTEMPTS = 3;
-    private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
+
 
 
     @Autowired
@@ -73,42 +73,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public void lock(Optional<User> user) {
         user.get().setIsLocked(false);
         userRepository.save(user.get());
-    }
-
-
-    public String resetPassword(String token, String password) {
-
-        Optional<User> userOptional = Optional
-                .ofNullable(userRepository.findByPasswordResetToken(token));
-
-        if (!userOptional.isPresent()) {
-            return "Invalid token.";
-        }
-
-        LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
-
-        if (isTokenExpired(tokenCreationDate)) {
-            return "Token expired.";
-
-        }
-
-        User user = userOptional.get();
-
-        user.setPassword(password);
-        user.setPasswordResetToken(null);
-        user.setTokenCreationDate(null);
-
-        userRepository.save(user);
-
-        return "Your password successfully updated.";
-    }
-
-    private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
-
-        LocalDateTime now = LocalDateTime.now();
-        Duration diff = Duration.between(tokenCreationDate, now);
-
-        return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
     }
 
 }
