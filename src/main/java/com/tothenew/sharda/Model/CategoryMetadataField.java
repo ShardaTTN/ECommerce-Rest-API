@@ -15,4 +15,5 @@ public class CategoryMetadataField {
     private Long id;
 
     private String name;
+
 }

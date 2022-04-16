@@ -1,8 +1,8 @@
 package com.tothenew.sharda.Model;
 
 import lombok.Data;
-
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,4 +18,5 @@ public class Category {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_category_id")
     private Category category;
+
 }

@@ -1,0 +1,910 @@
+{
+	"info": {
+		"_postman_id": "7a4275f1-a74e-4562-afba-9858e4a994f8",
+		"name": "Final Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@sd1876.com\",\r\n    \"password\": \"Password@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/admin/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"admin",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User List by Admin access",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/user-list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"user-list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup as Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Ashutosh\",\r\n    \"lastName\": \"Thakur\",\r\n    \"contact\": 7845127845,\r\n    \"email\": \"ashu@sd1876.com\",\r\n    \"password\": \"Password@123\",\r\n    \"confirmPassword\": \"Password@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup as Seller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Ashutosh\",\r\n    \"lastName\": \"Thakur\",\r\n    \"companyContact\": 7845127845,\r\n    \"email\": \"asherthtehu@sd1876.com\",\r\n    \"password\": \"Password@123\",\r\n    \"confirmPassword\": \"Password@123\",\r\n    \"companyName\": \"test 09 pvt ltd\",\r\n    \"gstNumber\": \"27AAPFU0939F1ZV\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/seller",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"seller"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate a Customer by its id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/activate/customer/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"activate",
+						"customer",
+						"2"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "4",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Account activation by Token",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/confirm?token=69323be7-8b11-4b3d-b0fc-4c29ce41704c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"confirm"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "69323be7-8b11-4b3d-b0fc-4c29ce41704c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Re-activation link mail",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/customer/confirm?email=ashu@sd1876.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"customer",
+						"confirm"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "ashu@sd1876.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"ashu@sd1876.com\",\r\n    \"password\": \"Password@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/customer/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"customer",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Customer Profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/customer/my-profile?accessToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MDQ1NzYsImV4cCI6MTY0OTUwNTQzNn0.KtMnP1DhaYR0t-aTtwkHf06Oyp1-TFhXxV0OqUZi28BCLT1k6grw_TLNNA2Dj6-2ofnOPvbhTM62dGjIHzqN3A",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"my-profile"
+					],
+					"query": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MDQ1NzYsImV4cCI6MTY0OTUwNTQzNn0.KtMnP1DhaYR0t-aTtwkHf06Oyp1-TFhXxV0OqUZi28BCLT1k6grw_TLNNA2Dj6-2ofnOPvbhTM62dGjIHzqN3A"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate a customer by its id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/deactivate/customer/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"deactivate",
+						"customer",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate a seller by its id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/activate/seller/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"activate",
+						"seller",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access new token using refresh token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"f82cc8f3-0b85-454e-a56f-abe2d5b7e410\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate a seller by its id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/deactivate/seller/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"deactivate",
+						"seller",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer change password",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk4NjI1NjksImV4cCI6MTY0OTg2MzQyOX0.d1aCwFAoC-YG1VNlJn1VIc4Kf8yXMX47fmygX3gI_QsGTv16nXJ4B_ukrTX3JEWq7m5cw5ZEw0dHS4SvBv9NeQ\",\r\n    \"password\": \"Ram@7845\",\r\n    \"confirmPassword\": \"Ram@7845\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/change-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Customer addreses",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/my-addresses?accessToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MTk2MDAsImV4cCI6MTY0OTUyMDQ2MH0.JKW96n0qs6NUkxJBsp37jibbsfjDAifCVKdkMXlMA8H2eakFsoNZ-OUwVaZybAMIbdj4yoTgD16X1PCLAB1Z8g",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"my-addresses"
+					],
+					"query": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MTk2MDAsImV4cCI6MTY0OTUyMDQ2MH0.JKW96n0qs6NUkxJBsp37jibbsfjDAifCVKdkMXlMA8H2eakFsoNZ-OUwVaZybAMIbdj4yoTgD16X1PCLAB1Z8g"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add address to customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852201\",\r\n    \"label\": \"Home\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/add-address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"add-address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete customer address",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/delete-address?accessToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MTk2MDAsImV4cCI6MTY0OTUyMDQ2MH0.JKW96n0qs6NUkxJBsp37jibbsfjDAifCVKdkMXlMA8H2eakFsoNZ-OUwVaZybAMIbdj4yoTgD16X1PCLAB1Z8g&addressId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"delete-address"
+					],
+					"query": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MTk2MDAsImV4cCI6MTY0OTUyMDQ2MH0.JKW96n0qs6NUkxJBsp37jibbsfjDAifCVKdkMXlMA8H2eakFsoNZ-OUwVaZybAMIbdj4yoTgD16X1PCLAB1Z8g"
+						},
+						{
+							"key": "addressId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update customer address",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"110053\",\r\n    \"label\": \"Home\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/update-address?addressId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"update-address"
+					],
+					"query": [
+						{
+							"key": "addressId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"asherthtehu@sd1876.com\",\n    \"password\": \"Password@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/seller/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"seller",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/seller/seller-profile?accessToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5ODQ3Mjc1LCJleHAiOjE2NDk4NDgxMzV9.3gfVMPW2FTb5x71lKN9Pz1K4iSSRcThJp3EWwdi5ckIX5Rkh1tY4g3X1wGBA25C42js6ZL4rWfu-_S_Q1eY3nA",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"seller",
+						"seller-profile"
+					],
+					"query": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5ODQ3Mjc1LCJleHAiOjE2NDk4NDgxMzV9.3gfVMPW2FTb5x71lKN9Pz1K4iSSRcThJp3EWwdi5ckIX5Rkh1tY4g3X1wGBA25C42js6ZL4rWfu-_S_Q1eY3nA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add address ",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5NzcxMzYyLCJleHAiOjE2NDk3NzIyMjJ9.Mmoi4pzR13YGFNIGqmuJSr0cLQgMpAGXaD8bw9Wuz3QwymsiyKyOxOyckz9fGH0ohUWuylIjuzgM1i2NQ5N5MA\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852201\",\r\n    \"label\": \"Home\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/address/add-address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"address",
+						"add-address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller change password",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MTQzMTgsImV4cCI6MTY0OTUxNTE3OH0._TjkkUJRQPA4GQK7OVUyW0u9zzoog2EXmTZklko8ipbM5_Ms2VF7oUgcu7Y6UyZTDSJ9lPkh9yHo5lKkrwcTDg\",\n    \"password\": \"Ram@7845\",\n    \"confirmPassword\": \"Ram@7845\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/seller/change-seller-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"seller",
+						"change-seller-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update seller profile",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accessToken\":\"\",\n    \"firstName\": \"sharda\",\n    \"lastName\": \"Thakur\",\n    \"companyContact\": 7845127845,\n    \"email\": \"asherthtehu@sd1876.com\",\n    \"password\": \"Password@123\",\n    \"confirmPassword\": \"Password@123\",\n    \"companyName\": \"test 09 pvt ltd\",\n    \"gstNumber\": \"27AAPFU0939F1ZV\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/seller/update-seller-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"seller",
+						"update-seller-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update customer address",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"110053\",\r\n    \"label\": \"Home\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/update-address?addressId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"update-address"
+					],
+					"query": [
+						{
+							"key": "addressId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update seller address",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5ODQ3Mjc1LCJleHAiOjE2NDk4NDgxMzV9.3gfVMPW2FTb5x71lKN9Pz1K4iSSRcThJp3EWwdi5ckIX5Rkh1tY4g3X1wGBA25C42js6ZL4rWfu-_S_Q1eY3nA\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"110053\",\r\n    \"label\": \"Home\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/seller/update-seller-address?addressId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"seller",
+						"update-seller-address"
+					],
+					"query": [
+						{
+							"key": "addressId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test upload image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Ashu Yadav/Pictures/bundle.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customer/upload-image?accessToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk5MzA2NjgsImV4cCI6MTY0OTkzMTUyOH0.L3hjOxk6byAvXAyraXkGJLsMf2c-4VpcS87pOFKsPXEbOtP5NyN_yMYawooEybYJNOE7iSyq0FhE3JV1DnXbDw",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer",
+						"upload-image"
+					],
+					"query": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk5MzA2NjgsImV4cCI6MTY0OTkzMTUyOH0.L3hjOxk6byAvXAyraXkGJLsMf2c-4VpcS87pOFKsPXEbOtP5NyN_yMYawooEybYJNOE7iSyq0FhE3JV1DnXbDw"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/user/forgot-password?email=ashu@sd1876.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"forgot-password"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "ashu@sd1876.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/add-category?categoryName=Shirts&parentId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"add-category"
+					],
+					"query": [
+						{
+							"key": "categoryName",
+							"value": "Shirts"
+						},
+						{
+							"key": "parentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"55ef35ac-147c-476a-9e03-f0d2768deb37\",\r\n    \"password\": \"Ram@12345\",\r\n    \"confirmPassword\": \"Ram@12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/reset-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

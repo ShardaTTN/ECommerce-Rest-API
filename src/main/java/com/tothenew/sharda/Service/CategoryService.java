@@ -2,7 +2,9 @@ package com.tothenew.sharda.Service;
 
 import com.tothenew.sharda.Model.Category;
 import com.tothenew.sharda.Model.CategoryMetadataField;
+import com.tothenew.sharda.Model.CategoryMetadataFieldValues;
 import com.tothenew.sharda.Repository.CategoryMetadataFieldRepository;
+import com.tothenew.sharda.Repository.CategoryMetadataFieldValuesRepository;
 import com.tothenew.sharda.Repository.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -20,6 +24,8 @@ public class CategoryService {
     CategoryRepository categoryRepository;
     @Autowired
     CategoryMetadataFieldRepository categoryMetadataFieldRepository;
+    @Autowired
+    CategoryMetadataFieldValuesRepository categoryMetadataFieldValuesRepository;
 
     public ResponseEntity<?> addCategory(String categoryName, Long parentCategoryId) {
 
@@ -66,9 +72,35 @@ public class CategoryService {
             CategoryMetadataField field = new CategoryMetadataField();
             field.setName(fieldName);
             field = categoryMetadataFieldRepository.save(field);
-            log.info("created main category");
+            log.info("created category metadata field");
             return new ResponseEntity<>(String.format("Category metadata field created with ID: "+field.getId()), HttpStatus.CREATED);
         }
 
+    }
+
+    public ResponseEntity<?> addCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, List<String> valueList) {
+        if (categoryRepository.existsById(categoryId)) {
+            Category category = categoryRepository.getById(categoryId);
+            log.info("category exists");
+            if (categoryMetadataFieldRepository.existsById(metadataFieldId)) {
+                CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.getById(metadataFieldId);
+                log.info("category metadata exist");
+
+                //Logic
+                CategoryMetadataFieldValues categoryMetadataFieldValues = new CategoryMetadataFieldValues();
+                categoryMetadataFieldValues.setValueList(valueList);
+                categoryMetadataFieldValues.setCategoryMetadataField(categoryMetadataField);
+                categoryMetadataFieldValues.setCategory(category);
+                categoryMetadataFieldValuesRepository.save(categoryMetadataFieldValues);
+
+                return new ResponseEntity<>("Added the passed values to category metadata field: "+ categoryMetadataField.getName(), HttpStatus.CREATED);
+            } else {
+                log.info("category metadata doesn't exist");
+                return new ResponseEntity<>("No category metadata field exists with this ID: "+metadataFieldId, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            log.info("category does not exists");
+            return new ResponseEntity<>("No category exists with this ID: "+categoryId, HttpStatus.NOT_FOUND);
+        }
     }
 }
