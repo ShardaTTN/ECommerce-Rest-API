@@ -26,8 +26,14 @@ public class CategoryController {
         return categoryService.addMetadataField(fieldName);
     }
 
+
     @PostMapping("/add-category-metadata-field-values")
     public ResponseEntity<?> addCategoryMetadataFieldValues(@RequestParam("categoryId") Long categoryId, @RequestParam("metadataFieldId") Long metadataFieldId, @RequestParam("values") List<String> valueList) {
         return categoryService.addCategoryMetadataFieldValues(categoryId, metadataFieldId, valueList);
+    }
+
+    @GetMapping("/metadata-field")
+    public ResponseEntity<?> viewMetadataField(){
+        return categoryService.viewMetadataField();
     }
 }

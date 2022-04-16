@@ -64,7 +64,7 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity<?> addMetadataField(String fieldName){
+    public ResponseEntity<?> addMetadataField(String fieldName) {
         CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.findByCategoryMetadataFieldName(fieldName);
         if (categoryMetadataField != null) {
             return new ResponseEntity<>("You cannot create duplicate category metadata field!", HttpStatus.BAD_REQUEST);
@@ -75,8 +75,14 @@ public class CategoryService {
             log.info("created category metadata field");
             return new ResponseEntity<>(String.format("Category metadata field created with ID: "+field.getId()), HttpStatus.CREATED);
         }
-
     }
+
+    public ResponseEntity<?> viewMetadataField() {
+        List<CategoryMetadataField> list = categoryMetadataFieldRepository.findAll();
+        log.info("returning a list of metadata field.");
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 
     public ResponseEntity<?> addCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, List<String> valueList) {
         if (categoryRepository.existsById(categoryId)) {
@@ -103,4 +109,5 @@ public class CategoryService {
             return new ResponseEntity<>("No category exists with this ID: "+categoryId, HttpStatus.NOT_FOUND);
         }
     }
+
 }
