@@ -851,7 +851,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/category/add-category?categoryName=Shirts&parentId=1",
+					"raw": "http://localhost:8080/api/category/add-category?categoryName=Fashion",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -865,11 +865,12 @@
 					"query": [
 						{
 							"key": "categoryName",
-							"value": "Shirts"
+							"value": "Fashion"
 						},
 						{
 							"key": "parentId",
-							"value": "1"
+							"value": "1",
+							"disabled": true
 						}
 					]
 				}
@@ -901,6 +902,77 @@
 						"api",
 						"user",
 						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add metadata field for Category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/add-categoryMetadata-field?fieldName=Color",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"add-categoryMetadata-field"
+					],
+					"query": [
+						{
+							"key": "fieldName",
+							"value": "Color"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add values to metadata ",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/category/add-category-metadata-field-values?categoryId=1&metadataFieldId=1&values=Red,Blue,Red",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"add-category-metadata-field-values"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "1"
+						},
+						{
+							"key": "metadataFieldId",
+							"value": "1"
+						},
+						{
+							"key": "values",
+							"value": "Red,Blue,Red"
+						}
 					]
 				}
 			},

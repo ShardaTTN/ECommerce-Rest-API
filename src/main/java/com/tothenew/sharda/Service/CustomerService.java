@@ -281,10 +281,11 @@ public class CustomerService {
 
 
                 log.info("Image uploaded!");
+                return new ResponseEntity<>("Updated the profile with latest image provided.", HttpStatus.OK);
             } catch (Exception exception) {
                 log.error("Cannot upload image!");
+                return new ResponseEntity<>("Cannot upload Image!", HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>("Updated the profile with latest image provided.", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Could not load the image!", HttpStatus.BAD_REQUEST);
         }
