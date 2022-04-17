@@ -8,7 +8,7 @@ import java.io.InputStream;
 @Component
 public class FileUploaderForUsersUtil {
 
-    public final static String UPLOAD_DIR = "home\\\\sharda\\\\Documents\\\\testproject2\\\\src\\\\main\\\\resources\\\\static\\\\images\\\\users";
+    public final static String UPLOAD_DIR = "\\home\\sharda\\Documents\\testproject2\\src\\main\\resources\\static\\images\\users";
 
 //    public boolean uploadFile(MultipartFile file) {
 //        boolean result = false;

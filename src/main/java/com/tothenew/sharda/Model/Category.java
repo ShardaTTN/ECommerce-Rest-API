@@ -1,5 +1,6 @@
 package com.tothenew.sharda.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import javax.persistence.*;
 import java.util.Set;
@@ -19,4 +20,6 @@ public class Category {
     @JoinColumn(name = "parent_category_id")
     private Category category;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    private Set<CategoryMetadataField> categoryMetadataField;
 }

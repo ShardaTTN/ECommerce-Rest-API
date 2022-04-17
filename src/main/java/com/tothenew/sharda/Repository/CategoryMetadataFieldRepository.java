@@ -11,5 +11,4 @@ public interface CategoryMetadataFieldRepository extends JpaRepository<CategoryM
 
     @Query(value = "SELECT * FROM category_metadata_field a WHERE a.name = ?1", nativeQuery = true)
     CategoryMetadataField findByCategoryMetadataFieldName(String fieldName);
-
 }

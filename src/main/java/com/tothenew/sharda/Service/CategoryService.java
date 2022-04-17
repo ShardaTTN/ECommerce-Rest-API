@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -64,16 +65,27 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity<?> addMetadataField(String fieldName) {
+    public ResponseEntity<?> addMetadataField(String fieldName, Long categoryId) {
         CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.findByCategoryMetadataFieldName(fieldName);
         if (categoryMetadataField != null) {
             return new ResponseEntity<>("You cannot create duplicate category metadata field!", HttpStatus.BAD_REQUEST);
         } else {
-            CategoryMetadataField field = new CategoryMetadataField();
-            field.setName(fieldName);
-            field = categoryMetadataFieldRepository.save(field);
-            log.info("created category metadata field");
-            return new ResponseEntity<>(String.format("Category metadata field created with ID: "+field.getId()), HttpStatus.CREATED);
+            Category category = categoryRepository.getById(categoryId);
+            if (category == null) {
+                return new ResponseEntity<>("You cannot create metadata fields because no category exists to map!", HttpStatus.NOT_FOUND);
+            } else {
+
+                if (category.getCategory() == null) {
+                    return new ResponseEntity<>("You cannot create metadata fields for a parent category!", HttpStatus.BAD_REQUEST);
+                } else {
+                    CategoryMetadataField field = new CategoryMetadataField();
+                    field.setName(fieldName);
+                    field.setCategory(category);
+                    field = categoryMetadataFieldRepository.save(field);
+                    log.info("created category metadata field");
+                    return new ResponseEntity<>(String.format("Category metadata field created with ID: "+field.getId()), HttpStatus.CREATED);
+                }
+            }
         }
     }
 
@@ -88,18 +100,45 @@ public class CategoryService {
         if (categoryRepository.existsById(categoryId)) {
             Category category = categoryRepository.getById(categoryId);
             log.info("category exists");
+            if (category.getCategory() == null) {
+                return new ResponseEntity<>("You cannot add metadata field values for a parent category!", HttpStatus.BAD_REQUEST);
+            } else {
+                if (categoryMetadataFieldRepository.existsById(metadataFieldId)) {
+                    CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.getById(metadataFieldId);
+                    categoryMetadataField.setCategory(category);
+                    log.info("category metadata exist");
+                    CategoryMetadataFieldValues categoryMetadataFieldValues = new CategoryMetadataFieldValues();
+                    categoryMetadataFieldValues.setValueList(valueList);
+                    categoryMetadataFieldValues.setCategoryMetadataField(categoryMetadataField);
+                    categoryMetadataFieldValues.setCategory(category);
+                    categoryMetadataFieldRepository.save(categoryMetadataField);
+                    categoryMetadataFieldValuesRepository.save(categoryMetadataFieldValues);
+                    return new ResponseEntity<>("Added the passed values to category metadata field: "+ categoryMetadataField.getName(), HttpStatus.CREATED);
+                } else {
+                    log.info("category metadata doesn't exist");
+                    return new ResponseEntity<>("No category metadata field exists with this ID: "+metadataFieldId, HttpStatus.NOT_FOUND);
+                }
+            }
+        } else {
+            log.info("category does not exists");
+            return new ResponseEntity<>("No category exists with this ID: "+categoryId, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity<?> updateCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, List<String> valueList) {
+        if (categoryRepository.existsById(categoryId)) {
+            Category category = categoryRepository.getById(categoryId);
+            log.info("category exists");
             if (categoryMetadataFieldRepository.existsById(metadataFieldId)) {
                 CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.getById(metadataFieldId);
                 log.info("category metadata exist");
 
                 //Logic
-                CategoryMetadataFieldValues categoryMetadataFieldValues = new CategoryMetadataFieldValues();
+                CategoryMetadataFieldValues categoryMetadataFieldValues = categoryMetadataFieldValuesRepository.findByCategoryMetadataFieldId(metadataFieldId);
                 categoryMetadataFieldValues.setValueList(valueList);
-                categoryMetadataFieldValues.setCategoryMetadataField(categoryMetadataField);
-                categoryMetadataFieldValues.setCategory(category);
                 categoryMetadataFieldValuesRepository.save(categoryMetadataFieldValues);
 
-                return new ResponseEntity<>("Added the passed values to category metadata field: "+ categoryMetadataField.getName(), HttpStatus.CREATED);
+                return new ResponseEntity<>("Updated the passed values to category metadata field: "+ categoryMetadataField.getName(), HttpStatus.CREATED);
             } else {
                 log.info("category metadata doesn't exist");
                 return new ResponseEntity<>("No category metadata field exists with this ID: "+metadataFieldId, HttpStatus.NOT_FOUND);
@@ -110,4 +149,25 @@ public class CategoryService {
         }
     }
 
+    public ResponseEntity<?> updateCategory(Long categoryId, String categoryName) {
+        if (categoryRepository.existsById(categoryId)) {
+            log.info("category exists");
+            Category category = categoryRepository.getById(categoryId);
+            Category categoryDuplicate = categoryRepository.findByCategoryName(categoryName);
+            if (categoryDuplicate == null) {
+                category.setName(categoryName);
+                categoryRepository.save(category);
+                return new ResponseEntity<>("Saved category with updated name: "+category.getName(), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("You cannot create duplicate categories!", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("No Category exists with name: "+categoryName, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity<?> viewCategory(Long categoryId) {
+        Category category = categoryRepository.getById(categoryId);
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
 }
