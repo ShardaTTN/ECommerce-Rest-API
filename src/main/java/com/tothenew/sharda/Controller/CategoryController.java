@@ -4,9 +4,7 @@ import com.tothenew.sharda.Service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -49,5 +47,15 @@ public class CategoryController {
     @GetMapping("/view-category")
     public ResponseEntity<?> viewCategory(@RequestParam("categoryId") Long categoryId) {
         return categoryService.viewCategory(categoryId);
+    }
+
+    @GetMapping("/list-categories")
+    public ResponseEntity<?> viewAllCategories() {
+        return categoryService.viewAllCategories();
+    }
+
+    @GetMapping("/list-all-categories")
+    public ResponseEntity<?> listCategories(@RequestParam(required = false, value = "categoryId") Long id) {
+        return categoryService.viewCategoriesByOptionalId(id);
     }
 }

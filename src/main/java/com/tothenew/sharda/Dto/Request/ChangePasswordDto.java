@@ -3,7 +3,6 @@ package com.tothenew.sharda.Dto.Request;
 import com.tothenew.sharda.CustomValidation.PasswordMatchesForChangePasswordRequest;
 import com.tothenew.sharda.CustomValidation.ValidPassword;
 import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
 
 @Data

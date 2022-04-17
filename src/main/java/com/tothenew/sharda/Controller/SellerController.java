@@ -2,14 +2,11 @@ package com.tothenew.sharda.Controller;
 
 import com.tothenew.sharda.Dto.Request.AddAddressDto;
 import com.tothenew.sharda.Dto.Request.ChangePasswordDto;
-import com.tothenew.sharda.Dto.Request.UpdateCustomerDto;
 import com.tothenew.sharda.Dto.Request.UpdateSellerDto;
-import com.tothenew.sharda.Service.CustomerService;
 import com.tothenew.sharda.Service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -39,6 +36,4 @@ public class SellerController {
     public ResponseEntity<?> updateSellerAddress(@RequestParam("addressId") Long id, @RequestBody AddAddressDto addAddressDto) {
         return sellerService.updateSellerAddress(id, addAddressDto);
     }
-
-
 }

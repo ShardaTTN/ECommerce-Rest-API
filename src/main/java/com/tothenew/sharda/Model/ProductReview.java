@@ -1,7 +1,6 @@
 package com.tothenew.sharda.Model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity

@@ -1,14 +1,10 @@
 package com.tothenew.sharda.Service;
 
-import com.tothenew.sharda.Model.PasswordResetToken;
 import com.tothenew.sharda.Model.Role;
 import com.tothenew.sharda.Model.User;
-import com.tothenew.sharda.RegistrationConfig.Token.ConfirmationToken;
 import com.tothenew.sharda.Repository.PasswordResetTokenRepository;
 import com.tothenew.sharda.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 

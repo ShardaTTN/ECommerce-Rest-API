@@ -2,10 +2,6 @@ package com.tothenew.sharda.Controller;
 
 import com.tothenew.sharda.Dto.LoginDao;
 import com.tothenew.sharda.Dto.Request.TokenRefreshRequest;
-import com.tothenew.sharda.Dto.Response.JwtResponse;
-import com.tothenew.sharda.Dto.Response.MessageResponse;
-import com.tothenew.sharda.Dto.Response.TokenRefreshResponse;
-import com.tothenew.sharda.Dto.Response.UserInfoResponse;
 import com.tothenew.sharda.Dto.SignupCustomerDao;
 import com.tothenew.sharda.Dto.SignupSellerDao;
 import com.tothenew.sharda.Exception.Email.EmailSender;
@@ -18,9 +14,7 @@ import com.tothenew.sharda.Service.RefreshTokenService;
 import com.tothenew.sharda.Service.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -30,17 +24,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -140,11 +128,6 @@ public class AuthController {
 
         userRepository.save(user);
         sellerRepository.save(seller);
-
-//        String token = registrationService.generateToken(user);
-//
-//        String link = "http://localhost:8080/api/signup/seller/confirm?token="+token;
-//        emailSender.send(signupSellerDao.getEmail(), registrationService.buildEmail(signupSellerDao.getFirstName(), link));
 
         //Custom email testing part
         SimpleMailMessage mailMessage = new SimpleMailMessage();

@@ -1,5 +1,6 @@
 package com.tothenew.sharda.Service;
 
+import com.tothenew.sharda.Dto.Response.ViewCategoryDto;
 import com.tothenew.sharda.Model.Category;
 import com.tothenew.sharda.Model.CategoryMetadataField;
 import com.tothenew.sharda.Model.CategoryMetadataFieldValues;
@@ -12,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -167,7 +166,30 @@ public class CategoryService {
     }
 
     public ResponseEntity<?> viewCategory(Long categoryId) {
-        Category category = categoryRepository.getById(categoryId);
+        Category currCategory = categoryRepository.getById(categoryId);
+        List<Category> childCategories = categoryRepository.findChildCategories(categoryId);
+        ViewCategoryDto category = new ViewCategoryDto();
+        category.setCurrentCategory(currCategory);
+        category.setChildCategories(childCategories);
         return new ResponseEntity<>(category, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> viewAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> viewCategoriesByOptionalId(Long id) {
+        if (id != null) {
+            if (categoryRepository.existsById(id)) {
+                List<Category> categories = categoryRepository.findChildCategories(id);
+                return new ResponseEntity<>(categories, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("No Category exists with this id: "+id, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            List<Category> categories = categoryRepository.findCategoryByNull();
+            return new ResponseEntity<>(categories, HttpStatus.OK);
+        }
     }
 }

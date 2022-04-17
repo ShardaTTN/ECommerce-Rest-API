@@ -15,8 +15,7 @@ public class PageController {
     MessageSource messageSource;
 
     @GetMapping(path="/international")
-    public String apiInternationalized()
-    {
+    public String apiInternationalized() {
         return messageSource.getMessage("greeting.messages", null, LocaleContextHolder.getLocale());
     }
 }

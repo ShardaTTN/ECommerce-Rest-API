@@ -1,8 +1,6 @@
 package com.tothenew.sharda.CustomValidation;
 
 import com.tothenew.sharda.Dto.Request.ResetPasswordDto;
-import com.tothenew.sharda.Dto.SignupSellerDao;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

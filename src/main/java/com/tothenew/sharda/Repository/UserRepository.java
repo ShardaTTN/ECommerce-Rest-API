@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
-    User findByPasswordResetToken(String token);
     User findUserByEmail(String email);
 
     @Query(value = "SELECT a.is_active from users a WHERE a.id = ?1", nativeQuery = true)

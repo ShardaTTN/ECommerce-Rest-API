@@ -3,7 +3,6 @@ package com.tothenew.sharda.Service;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
-
 import com.tothenew.sharda.Exception.TokenRefreshException;
 import com.tothenew.sharda.Model.RefreshToken;
 import com.tothenew.sharda.Repository.RefreshTokenRepository;
@@ -11,7 +10,6 @@ import com.tothenew.sharda.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RefreshTokenService {

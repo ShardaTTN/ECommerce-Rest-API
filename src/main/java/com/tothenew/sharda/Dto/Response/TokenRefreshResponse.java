@@ -1,12 +1,8 @@
 package com.tothenew.sharda.Dto.Response;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
-@Getter
-@Setter
 public class TokenRefreshResponse {
     private String accessToken;
     private String refreshToken;

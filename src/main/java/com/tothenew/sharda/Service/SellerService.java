@@ -2,7 +2,6 @@ package com.tothenew.sharda.Service;
 
 import com.tothenew.sharda.Dto.Request.AddAddressDto;
 import com.tothenew.sharda.Dto.Request.ChangePasswordDto;
-import com.tothenew.sharda.Dto.Request.UpdateCustomerDto;
 import com.tothenew.sharda.Dto.Request.UpdateSellerDto;
 import com.tothenew.sharda.Exception.TokenExpiredException;
 import com.tothenew.sharda.Model.AccessToken;
@@ -20,8 +19,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;

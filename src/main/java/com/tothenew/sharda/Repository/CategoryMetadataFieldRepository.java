@@ -1,6 +1,5 @@
 package com.tothenew.sharda.Repository;
 
-import com.tothenew.sharda.Model.Category;
 import com.tothenew.sharda.Model.CategoryMetadataField;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
