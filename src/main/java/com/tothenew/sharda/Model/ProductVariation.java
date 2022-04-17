@@ -17,9 +17,8 @@ public class ProductVariation {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer quantity;
-
+    private Integer quantityAvailable;
+    private Double price;
     private String primaryImageName;
-
     private Boolean isActive;
 }

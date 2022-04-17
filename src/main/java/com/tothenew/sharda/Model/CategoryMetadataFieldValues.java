@@ -3,8 +3,7 @@ package com.tothenew.sharda.Model;
 import com.tothenew.sharda.Service.ListToStringConverter;
 import lombok.Data;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,5 +23,5 @@ public class CategoryMetadataFieldValues {
     CategoryMetadataField categoryMetadataField;
 
     @Convert(converter = ListToStringConverter.class)
-    private List<String> valueList = new ArrayList<>();
+    private Set<String> valueList;
 }

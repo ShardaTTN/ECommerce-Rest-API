@@ -64,7 +64,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"Ashutosh\",\r\n    \"lastName\": \"Thakur\",\r\n    \"contact\": 7845127845,\r\n    \"email\": \"ashu@sd1876.com\",\r\n    \"password\": \"Password@123\",\r\n    \"confirmPassword\": \"Password@123\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"Sharda\",\r\n    \"lastName\": \"Thakur\",\r\n    \"contact\": 7845127845,\r\n    \"email\": \"sharda@sd1876.com\",\r\n    \"password\": \"Password@123\",\r\n    \"confirmPassword\": \"Password@123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -94,7 +94,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"Ashutosh\",\r\n    \"lastName\": \"Thakur\",\r\n    \"companyContact\": 7845127845,\r\n    \"email\": \"asherthtehu@sd1876.com\",\r\n    \"password\": \"Password@123\",\r\n    \"confirmPassword\": \"Password@123\",\r\n    \"companyName\": \"test 09 pvt ltd\",\r\n    \"gstNumber\": \"27AAPFU0939F1ZV\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"Sharda\",\r\n    \"lastName\": \"Thakur\",\r\n    \"companyContact\": 7845127845,\r\n    \"email\": \"shardaseller@sd1876.com\",\r\n    \"password\": \"Password@123\",\r\n    \"confirmPassword\": \"Password@123\",\r\n    \"companyName\": \"test 09 pvt ltd\",\r\n    \"gstNumber\": \"27AAPFU0939F1ZV\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -200,7 +200,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/auth/customer/confirm?email=ashu@sd1876.com",
+					"raw": "http://localhost:8080/api/auth/customer/confirm?email=sharda@sd1876.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -215,7 +215,7 @@
 					"query": [
 						{
 							"key": "email",
-							"value": "ashu@sd1876.com"
+							"value": "sharda@sd1876.com"
 						}
 					]
 				}
@@ -229,7 +229,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"ashu@sd1876.com\",\r\n    \"password\": \"Password@123\"\r\n}",
+					"raw": "{\r\n    \"email\": \"sharda@sd1876.com\",\r\n    \"password\": \"Password@123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -462,7 +462,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852201\",\r\n    \"label\": \"Home\"\r\n}",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 68, Ward no. 22\",\r\n    \"city\": \"Saharsa\",\r\n    \"state\": \"Bihar\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852201\",\r\n    \"label\": \"Home\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -532,7 +532,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"110053\",\r\n    \"label\": \"Home\"\r\n}",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 188, Ward no. 03\",\r\n    \"city\": \"Saharsa\",\r\n    \"state\": \"Bihar\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852212\",\r\n    \"label\": \"Home\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -568,7 +568,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"asherthtehu@sd1876.com\",\n    \"password\": \"Password@123\"\n}",
+					"raw": "{\n    \"email\": \"shardaseller@sd1876.com\",\n    \"password\": \"Password@123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -620,36 +620,6 @@
 			"response": []
 		},
 		{
-			"name": "Add address ",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5NzcxMzYyLCJleHAiOjE2NDk3NzIyMjJ9.Mmoi4pzR13YGFNIGqmuJSr0cLQgMpAGXaD8bw9Wuz3QwymsiyKyOxOyckz9fGH0ohUWuylIjuzgM1i2NQ5N5MA\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852201\",\r\n    \"label\": \"Home\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/address/add-address",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"address",
-						"add-address"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Seller change password",
 			"request": {
 				"method": "PUT",
@@ -686,7 +656,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"accessToken\":\"\",\n    \"firstName\": \"sharda\",\n    \"lastName\": \"Thakur\",\n    \"companyContact\": 7845127845,\n    \"email\": \"asherthtehu@sd1876.com\",\n    \"password\": \"Password@123\",\n    \"confirmPassword\": \"Password@123\",\n    \"companyName\": \"test 09 pvt ltd\",\n    \"gstNumber\": \"27AAPFU0939F1ZV\"\n}",
+					"raw": "{\n    \"accessToken\":\"\",\n    \"firstName\": \"sharda\",\n    \"lastName\": \"Thakur\",\n    \"companyContact\": 7845127845,\n    \"email\": \"saloni@sd1876.com\",\n    \"password\": \"Password@123\",\n    \"confirmPassword\": \"Password@123\",\n    \"companyName\": \"test 09 pvt ltd\",\n    \"gstNumber\": \"27AAPFU0939F1ZV\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -710,49 +680,13 @@
 			"response": []
 		},
 		{
-			"name": "Update customer address",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QHNkMTg3Ni5jb20iLCJpYXQiOjE2NDk1MjA4MTAsImV4cCI6MTY0OTUyMTY3MH0.qNtvztxCId2BnhYR9WO8ZQ6mfz-KB3P2qlA5vDZ8PfuPwPg_RmlcY7aBynJc4J36xbo8h5aUHwHr3PsMdD5Hyw\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"110053\",\r\n    \"label\": \"Home\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/customer/update-address?addressId=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"customer",
-						"update-address"
-					],
-					"query": [
-						{
-							"key": "addressId",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Update seller address",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5ODQ3Mjc1LCJleHAiOjE2NDk4NDgxMzV9.3gfVMPW2FTb5x71lKN9Pz1K4iSSRcThJp3EWwdi5ckIX5Rkh1tY4g3X1wGBA25C42js6ZL4rWfu-_S_Q1eY3nA\",\r\n    \"address\": \"House no. 187, mere dil k ander, war no. 0314\",\r\n    \"city\": \"gomo\",\r\n    \"state\": \"GOMO\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"110053\",\r\n    \"label\": \"Home\"\r\n}",
+					"raw": "{\r\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2hlcnRodGVodUBzZDE4NzYuY29tIiwiaWF0IjoxNjQ5ODQ3Mjc1LCJleHAiOjE2NDk4NDgxMzV9.3gfVMPW2FTb5x71lKN9Pz1K4iSSRcThJp3EWwdi5ckIX5Rkh1tY4g3X1wGBA25C42js6ZL4rWfu-_S_Q1eY3nA\",\r\n    \"address\": \"House no. 187, Ward no. 22\",\r\n    \"city\": \"Saharsa\",\r\n    \"state\": \"Bihar\",\r\n    \"country\": \"India\",\r\n    \"zipcode\": \"852204\",\r\n    \"label\": \"Home\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -792,7 +726,7 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/C:/Users/Ashu Yadav/Pictures/bundle.png"
+							"src": []
 						}
 					]
 				},
@@ -824,7 +758,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/user/forgot-password?email=ashu@sd1876.com",
+					"raw": "http://localhost:8080/api/user/forgot-password?email=sharda@sd1876.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -838,7 +772,7 @@
 					"query": [
 						{
 							"key": "email",
-							"value": "ashu@sd1876.com"
+							"value": "sharda@sd1876.com"
 						}
 					]
 				}
@@ -913,7 +847,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/category/add-categoryMetadata-field?fieldName=Color",
+					"raw": "http://localhost:8080/api/category/add-categoryMetadata-field?fieldName=Color&categoryId=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -928,6 +862,10 @@
 						{
 							"key": "fieldName",
 							"value": "Color"
+						},
+						{
+							"key": "categoryId",
+							"value": "2"
 						}
 					]
 				}
@@ -949,7 +887,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/category/add-category-metadata-field-values?categoryId=1&metadataFieldId=1&values=Red,Blue,Red",
+					"raw": "http://localhost:8080/api/category/add-category-metadata-field-values?categoryId=2&metadataFieldId=1&values=Red,Blue,Red",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -963,7 +901,7 @@
 					"query": [
 						{
 							"key": "categoryId",
-							"value": "1"
+							"value": "2"
 						},
 						{
 							"key": "metadataFieldId",
@@ -972,6 +910,268 @@
 						{
 							"key": "values",
 							"value": "Red,Blue,Red"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update values of metadata fiels",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/update-category-metadata-field-values?categoryId=2&metadataFieldId=1&values=Green,Blue,Red",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"update-category-metadata-field-values"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "2"
+						},
+						{
+							"key": "metadataFieldId",
+							"value": "1"
+						},
+						{
+							"key": "values",
+							"value": "Green,Blue,Red"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update category",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/update-category?categoryId=1&categoryName=Clothing",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"update-category"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "1"
+						},
+						{
+							"key": "categoryName",
+							"value": "Clothing"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/view-category?categoryId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"view-category"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/list-categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"list-categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all category with option category id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/category/list-all-categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"category",
+						"list-all-categories"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/product/add-product?name=Polo T-shirt&brand=Flying Machine&categoryId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"product",
+						"add-product"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Polo T-shirt"
+						},
+						{
+							"key": "brand",
+							"value": "Flying Machine"
+						},
+						{
+							"key": "categoryId",
+							"value": "2"
+						},
+						{
+							"key": "description",
+							"value": "Quite expensive t-shirt",
+							"disabled": true
+						},
+						{
+							"key": "isCancellable",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "isReturnable",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/product/delete-product?productId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"product",
+						"delete-product"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/product/update-product?productId=1&name=Oversize T-shirt&description=Expensive T-shirt&isCancellable=true&isReturnable=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"product",
+						"update-product"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": "1"
+						},
+						{
+							"key": "name",
+							"value": "Oversize T-shirt"
+						},
+						{
+							"key": "description",
+							"value": "Expensive T-shirt"
+						},
+						{
+							"key": "isCancellable",
+							"value": "true"
+						},
+						{
+							"key": "isReturnable",
+							"value": "true"
 						}
 					]
 				}

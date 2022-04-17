@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -95,7 +96,7 @@ public class CategoryService {
     }
 
 
-    public ResponseEntity<?> addCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, List<String> valueList) {
+    public ResponseEntity<?> addCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, Set<String> valueList) {
         if (categoryRepository.existsById(categoryId)) {
             Category category = categoryRepository.getById(categoryId);
             log.info("category exists");
@@ -124,7 +125,7 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity<?> updateCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, List<String> valueList) {
+    public ResponseEntity<?> updateCategoryMetadataFieldValues(Long categoryId, Long metadataFieldId, Set<String> valueList) {
         if (categoryRepository.existsById(categoryId)) {
             Category category = categoryRepository.getById(categoryId);
             log.info("category exists");

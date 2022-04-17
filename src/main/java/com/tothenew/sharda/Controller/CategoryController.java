@@ -4,7 +4,7 @@ import com.tothenew.sharda.Service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -25,7 +25,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add-category-metadata-field-values")
-    public ResponseEntity<?> addCategoryMetadataFieldValues(@RequestParam("categoryId") Long categoryId, @RequestParam("metadataFieldId") Long metadataFieldId, @RequestParam("values") List<String> valueList) {
+    public ResponseEntity<?> addCategoryMetadataFieldValues(@RequestParam("categoryId") Long categoryId, @RequestParam("metadataFieldId") Long metadataFieldId, @RequestParam("values") Set<String> valueList) {
         return categoryService.addCategoryMetadataFieldValues(categoryId, metadataFieldId, valueList);
     }
 
@@ -35,7 +35,7 @@ public class CategoryController {
     }
 
     @PutMapping("/update-category-metadata-field-values")
-    public ResponseEntity<?> updateCategoryMetadataFieldValues(@RequestParam("categoryId") Long categoryId, @RequestParam("metadataFieldId") Long metadataFieldId, @RequestParam("values") List<String> valueList) {
+    public ResponseEntity<?> updateCategoryMetadataFieldValues(@RequestParam("categoryId") Long categoryId, @RequestParam("metadataFieldId") Long metadataFieldId, @RequestParam("values") Set<String> valueList) {
         return categoryService.updateCategoryMetadataFieldValues(categoryId, metadataFieldId, valueList);
     }
 

@@ -22,6 +22,12 @@
 
 ###-Admin can activate and de-activate anyone's account
 
+###-Admin can create category, it's metadata fields and also their values
+
+###-Seller can add Products and their variations (working on variations part)
+
+###-Admin can activate & deactivate product
+
 
 
 ###GST Number Examples According to Indian Govt. norms
@@ -31,3 +37,8 @@
 ####27AASCS2460H1Z0
 
 ####29AAGCB7383J1Z4
+
+
+
+##Project Created by Sharda Kumari
+###Email - sharda.kumari@tothenew.com
